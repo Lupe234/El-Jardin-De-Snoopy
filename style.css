@@ -1,5 +1,6 @@
 /* ==========================================
-   CONFIGURACIÓN GENERAL
+   EL JARDÍN DE SNOOPY
+   ESTILOS GENERALES
 ========================================== */
 
 * {
@@ -43,7 +44,10 @@ button:active {
 }
 
 button:focus-visible,
-a:focus-visible {
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
     outline: 3px solid #e9a0ad;
     outline-offset: 3px;
 }
@@ -52,9 +56,7 @@ a {
     color: inherit;
 }
 
-/* ==========================================
-   ENCABEZADO
-========================================== */
+/* ENCABEZADO */
 
 header {
     background: linear-gradient(135deg, #b8263a, #d64b68);
@@ -78,9 +80,7 @@ header .frase {
     opacity: .9;
 }
 
-/* ==========================================
-   NAVEGACIÓN
-========================================== */
+/* NAVEGACIÓN */
 
 .navegacion {
     display: flex;
@@ -88,7 +88,7 @@ header .frase {
     flex-wrap: wrap;
     gap: 12px;
     padding: 14px;
-    background: #fff;
+    background: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, .07);
 }
 
@@ -104,9 +104,7 @@ header .frase {
     background: #fff0f3;
 }
 
-/* ==========================================
-   ESTRUCTURA
-========================================== */
+/* ESTRUCTURA */
 
 main {
     width: 92%;
@@ -137,9 +135,7 @@ h2 {
     padding: 25px;
 }
 
-/* ==========================================
-   CATÁLOGO DE PRODUCTOS
-========================================== */
+/* CATÁLOGO */
 
 .contenedor-productos {
     display: grid;
@@ -162,18 +158,24 @@ h2 {
     box-shadow: 0 8px 18px rgba(0, 0, 0, .15);
 }
 
-.producto img {
-    display: block;
-    width: 100%;
-    height: 230px;
-    object-fit: cover;
-    border-radius: 12px;
+.producto-emoji {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 180px;
     background: #fff0f3;
+    border-radius: 12px;
+    font-size: 85px;
 }
 
 .producto h3 {
     margin: 15px 0 8px;
     overflow-wrap: anywhere;
+}
+
+.producto p:not(.precio) {
+    color: #666;
+    margin-bottom: 12px;
 }
 
 .precio {
@@ -187,120 +189,7 @@ h2 {
     width: 100%;
 }
 
-/* ==========================================
-   PERSONALIZACIÓN DE RAMOS
-========================================== */
-
-.personalizacion {
-    padding: 32px;
-    background: white;
-    border: 2px solid #f1c1cc;
-    border-radius: 18px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, .09);
-}
-
-.personalizacion h2 {
-    font-size: 28px;
-}
-
-#formulario-personalizacion {
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.campo-personalizacion {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-}
-
-.campo-personalizacion label {
-    font-weight: bold;
-    color: #8f2638;
-    margin-bottom: 7px;
-}
-
-.campo-personalizacion select,
-.campo-personalizacion textarea,
-#formulario-pedido input,
-#formulario-pedido textarea,
-#formulario-pedido select {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #e2b5bd;
-    border-radius: 8px;
-    background: #fffdfd;
-    color: #333;
-    font-size: 16px;
-}
-
-.campo-personalizacion select {
-    min-height: 48px;
-}
-
-.campo-personalizacion textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-.campo-personalizacion small {
-    color: #777;
-    margin-top: 6px;
-}
-
-.campo-personalizacion select:focus,
-.campo-personalizacion textarea:focus,
-#formulario-pedido input:focus,
-#formulario-pedido textarea:focus,
-#formulario-pedido select:focus {
-    outline: none;
-    border-color: #b8263a;
-    box-shadow: 0 0 0 3px rgba(184, 38, 58, .12);
-}
-
-.precio-personalizado {
-    background: #fff0f3;
-    border: 1px solid #f1c1cc;
-    padding: 22px;
-    margin: 25px 0;
-    border-radius: 12px;
-    text-align: center;
-}
-
-.precio-personalizado p {
-    color: #666;
-    margin-bottom: 8px;
-}
-
-.precio-personalizado h3 {
-    font-size: 34px;
-    color: #b8263a;
-    margin-bottom: 8px;
-}
-
-.precio-personalizado small {
-    color: #777;
-}
-
-.boton-personalizar {
-    width: 100%;
-    padding: 15px;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.mensaje-estado {
-    min-height: 24px;
-    text-align: center;
-    color: #8f2638;
-    margin-top: 12px;
-    overflow-wrap: anywhere;
-}
-
-/* ==========================================
-   CARRITO
-========================================== */
+/* CARRITO */
 
 .carrito {
     background: white;
@@ -389,17 +278,13 @@ h2 {
     font-size: 17px;
 }
 
-/* ==========================================
-   MODALES
-========================================== */
+/* VENTANAS EMERGENTES */
 
 .modal {
     display: none;
     position: fixed;
     z-index: 1000;
     inset: 0;
-    width: 100%;
-    height: 100%;
     background: rgba(0, 0, 0, .65);
     justify-content: center;
     align-items: center;
@@ -446,9 +331,7 @@ h2 {
     color: #b8263a;
 }
 
-/* ==========================================
-   FORMULARIO DE PEDIDO
-========================================== */
+/* FORMULARIO */
 
 #formulario-pedido {
     display: flex;
@@ -461,18 +344,34 @@ h2 {
     font-weight: bold;
 }
 
+#formulario-pedido input,
+#formulario-pedido textarea,
+#formulario-pedido select {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2b5bd;
+    border-radius: 8px;
+    background: #fffdfd;
+    color: #333;
+    font-size: 16px;
+}
+
 #formulario-pedido textarea {
     min-height: 85px;
     resize: vertical;
 }
 
 .datos-pago {
-    display: none;
     margin-top: 20px;
     padding: 20px;
     background: #fff5f7;
     border: 2px solid #f1c1cc;
     border-radius: 12px;
+}
+
+.datos-pago[hidden] {
+    display: none;
 }
 
 .datos-pago h3 {
@@ -501,10 +400,6 @@ h2 {
     min-width: 0;
 }
 
-.tarjeta-fila input {
-    width: 100%;
-}
-
 .resumen {
     display: flex;
     justify-content: space-between;
@@ -526,9 +421,7 @@ h2 {
     margin-top: 20px;
 }
 
-/* ==========================================
-   CONFIRMACIÓN DEL PEDIDO
-========================================== */
+/* CONFIRMACIÓN */
 
 .icono-confirmacion {
     text-align: center;
@@ -561,48 +454,6 @@ h2 {
     margin: 7px 0;
 }
 
-.producto-confirmado {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 11px 0;
-    border-bottom: 1px solid #ddd;
-    gap: 15px;
-}
-
-.producto-confirmado:last-child {
-    border-bottom: none;
-}
-
-.producto-confirmado .nombre {
-    font-weight: bold;
-    overflow-wrap: anywhere;
-}
-
-.producto-confirmado .cantidad {
-    color: #666;
-    font-size: 14px;
-    margin-top: 4px;
-}
-
-.producto-confirmado .subtotal {
-    color: #b8263a;
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-.dato-pago {
-    background: white;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-}
-
-.dato-pago p {
-    overflow-wrap: anywhere;
-}
-
 .total-confirmacion {
     display: flex;
     justify-content: space-between;
@@ -625,9 +476,7 @@ h2 {
     margin-top: 20px;
 }
 
-/* ==========================================
-   ANIMACIONES
-========================================== */
+/* ANIMACIONES */
 
 @keyframes aparecer {
     from {
@@ -641,9 +490,7 @@ h2 {
     }
 }
 
-/* ==========================================
-   PIE DE PÁGINA
-========================================== */
+/* PIE DE PÁGINA */
 
 footer {
     margin-top: 50px;
@@ -659,9 +506,7 @@ footer p + p {
     opacity: .9;
 }
 
-/* ==========================================
-   TABLETAS
-========================================== */
+/* TABLETAS */
 
 @media (max-width: 850px) {
     .contenedor-productos {
@@ -669,14 +514,12 @@ footer p + p {
         gap: 16px;
     }
 
-    .producto img {
-        height: 210px;
+    .producto-emoji {
+        height: 160px;
     }
 }
 
-/* ==========================================
-   CELULARES
-========================================== */
+/* CELULARES */
 
 @media (max-width: 600px) {
     header {
@@ -713,8 +556,9 @@ footer p + p {
         padding: 10px;
     }
 
-    .producto img {
-        height: 155px;
+    .producto-emoji {
+        height: 125px;
+        font-size: 60px;
     }
 
     .producto h3 {
@@ -730,13 +574,8 @@ footer p + p {
         font-size: 12px;
     }
 
-    .personalizacion,
     .carrito {
         padding: 20px 15px;
-    }
-
-    .personalizacion h2 {
-        font-size: 23px;
     }
 
     .item-carrito {
@@ -774,8 +613,9 @@ footer p + p {
         grid-template-columns: 1fr;
     }
 
-    .producto img {
-        height: 220px;
+    .producto-emoji {
+        height: 180px;
+        font-size: 75px;
     }
 }
 
