@@ -24,7 +24,6 @@
     </nav>
 
     <main>
-        <!-- CATÁLOGO -->
         <section id="productos" class="seccion">
             <h2>🌷 Nuestros productos</h2>
             <p class="introduccion">
@@ -36,7 +35,6 @@
             </div>
         </section>
 
-        <!-- CARRITO -->
         <section id="carrito" class="seccion carrito">
             <h2>🛒 Mi carrito</h2>
             <p class="introduccion">
@@ -48,7 +46,7 @@
             </div>
 
             <div class="total">
-                <h3>Total: <span id="total">$0</span></h3>
+                <h3>Total: <span id="total">$0.00</span></h3>
             </div>
 
             <button type="button" id="boton-comprar" class="comprar">
@@ -92,7 +90,7 @@
                     <option value="Tarjeta">💳 Tarjeta (demostración)</option>
                 </select>
 
-                <div id="datos-transferencia" class="datos-pago">
+                <div id="datos-transferencia" class="datos-pago" hidden>
                     <h3>🏦 Datos de transferencia</h3>
                     <p class="nota">
                         Simulación educativa. No se verifica ninguna transferencia real.
@@ -108,10 +106,10 @@
 
                     <label for="monto-transferencia">Monto declarado</label>
                     <input type="number" id="monto-transferencia"
-                           min="0.01" step="0.01" placeholder="Monto transferido">
+                           min="0.01" step="0.01" placeholder="Monto declarado">
                 </div>
 
-                <div id="datos-tarjeta" class="datos-pago">
+                <div id="datos-tarjeta" class="datos-pago" hidden>
                     <h3>💳 Tarjeta de demostración</h3>
                     <p class="nota">
                         No introduzcas datos bancarios reales. Esta página no procesa pagos.
@@ -119,19 +117,19 @@
 
                     <label for="titular">Titular de prueba</label>
                     <input type="text" id="titular" maxlength="100"
-                           placeholder="Nombre ficticio">
+                           placeholder="Nombre ficticio" autocomplete="off">
 
                     <label for="numero-tarjeta">Número de tarjeta ficticio</label>
                     <input type="text" id="numero-tarjeta"
                            inputmode="numeric" maxlength="19"
-                           placeholder="1234 5678 9012 3456">
+                           placeholder="1234 5678 9012 3456" autocomplete="off">
 
                     <div class="tarjeta-fila">
                         <div>
                             <label for="vencimiento">Vencimiento</label>
                             <input type="text" id="vencimiento"
                                    inputmode="numeric" maxlength="5"
-                                   placeholder="MM/AA">
+                                   placeholder="MM/AA" autocomplete="off">
                         </div>
                         <div>
                             <label for="cvv">CVV ficticio</label>
@@ -144,7 +142,7 @@
 
                 <div class="resumen">
                     <span>Total del pedido:</span>
-                    <strong id="total-pago">$0</strong>
+                    <strong id="total-pago">$0.00</strong>
                 </div>
 
                 <button type="submit" class="confirmar">
@@ -190,7 +188,7 @@
 
             <div class="total-confirmacion">
                 <span>Total:</span>
-                <strong id="confirmacion-total">$0</strong>
+                <strong id="confirmacion-total">$0.00</strong>
             </div>
 
             <button type="button" id="boton-finalizar" class="boton-finalizar">
