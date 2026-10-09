@@ -1,41 +1,144 @@
 /* ==========================================
-   CARRITO
+   EL JARDÍN DE SNOOPY
+   CATÁLOGO, CARRITO Y PEDIDOS
+========================================== */
+
+
+/* ==========================================
+   CATÁLOGO DE PRODUCTOS
+========================================== */
+
+const productos = [
+    {
+        id: 1,
+        nombre: "Ramo de rosas rojas",
+        precio: 350,
+        emoji: "🌹",
+        descripcion: "Hermosas rosas para expresar tu amor."
+    },
+    {
+        id: 2,
+        nombre: "Ramo de girasoles",
+        precio: 280,
+        emoji: "🌻",
+        descripcion: "Flores llenas de alegría y luz."
+    },
+    {
+        id: 3,
+        nombre: "Ramo de tulipanes",
+        precio: 400,
+        emoji: "🌷",
+        descripcion: "Elegancia y belleza para cualquier ocasión."
+    },
+    {
+        id: 4,
+        nombre: "Ramo de margaritas",
+        precio: 250,
+        emoji: "🌼",
+        descripcion: "Un detalle sencillo y lleno de ternura."
+    },
+    {
+        id: 5,
+        nombre: "Ramo de lirios",
+        precio: 380,
+        emoji: "🤍",
+        descripcion: "Flores elegantes para momentos especiales."
+    },
+    {
+        id: 6,
+        nombre: "Ramo de flores mixtas",
+        precio: 450,
+        emoji: "💐",
+        descripcion: "Una combinación de flores para sorprender."
+    }
+];
+
+
+/* ==========================================
+   VARIABLES
 ========================================== */
 
 let carrito = [];
 
 
 /* ==========================================
-   AGREGAR PRODUCTO
+   MOSTRAR CATÁLOGO
 ========================================== */
 
-function agregar(nombre, precio) {
+function mostrarProductos() {
+    const contenedor = document.getElementById(
+        "contenedor-productos"
+    );
 
-    const productoExistente =
-        carrito.find(
-            producto =>
-                producto.nombre === nombre
-        );
+    if (!contenedor) return;
 
+    contenedor.innerHTML = "";
 
-    if (productoExistente) {
+    productos.forEach(producto => {
+        const tarjeta = document.createElement("article");
+        tarjeta.className = "producto";
 
-        productoExistente.cantidad++;
+        const emoji = document.createElement("div");
+        emoji.className = "producto-emoji";
+        emoji.textContent = producto.emoji;
 
-    } else {
+        const nombre = document.createElement("h3");
+        nombre.textContent = producto.nombre;
 
-        carrito.push({
+        const descripcion = document.createElement("p");
+        descripcion.textContent = producto.descripcion;
 
-            nombre: nombre,
+        const precio = document.createElement("p");
+        precio.className = "precio";
+        precio.textContent = `$${producto.precio.toFixed(2)}`;
 
-            precio: precio,
+        const boton = document.createElement("button");
+        boton.type = "button";
+        boton.className = "boton-agregar";
+        boton.textContent = "🛒 Agregar al carrito";
 
-            cantidad: 1
-
+        boton.addEventListener("click", () => {
+            agregar(producto.id);
         });
 
-    }
+        tarjeta.append(
+            emoji,
+            nombre,
+            descripcion,
+            precio,
+            boton
+        );
 
+        contenedor.appendChild(tarjeta);
+    });
+}
+
+
+/* ==========================================
+   AGREGAR PRODUCTO AL CARRITO
+========================================== */
+
+function agregar(id) {
+    const producto = productos.find(
+        item => item.id === id
+    );
+
+    if (!producto) return;
+
+    const existente = carrito.find(
+        item => item.id === id
+    );
+
+    if (existente) {
+        existente.cantidad++;
+    } else {
+        carrito.push({
+            id: producto.id,
+            nombre: producto.nombre,
+            precio: producto.precio,
+            cantidad: 1
+        });
+    }
 
     actualizarCarrito();
 }
@@ -46,133 +149,85 @@ function agregar(nombre, precio) {
 ========================================== */
 
 function actualizarCarrito() {
+    const lista = document.getElementById("lista-carrito");
+    const totalElemento = document.getElementById("total");
 
-    const lista =
-        document.getElementById(
-            "lista-carrito"
-        );
-
-
-    const totalElemento =
-        document.getElementById(
-            "total"
-        );
-
-
-    if (carrito.length === 0) {
-
-        lista.innerHTML = `
-            <p>Tu carrito está vacío.</p>
-        `;
-
-        totalElemento.textContent = "0";
-
-        return;
-    }
-
+    if (!lista || !totalElemento) return;
 
     lista.innerHTML = "";
 
-    let total = 0;
+    if (carrito.length === 0) {
+        const mensaje = document.createElement("p");
+        mensaje.textContent = "Tu carrito está vacío.";
+        lista.appendChild(mensaje);
 
+        totalElemento.textContent = "$0.00";
+        return;
+    }
 
-    carrito.forEach(
-        (producto, indice) => {
+    carrito.forEach((producto, indice) => {
+        const item = document.createElement("div");
+        item.className = "item-carrito";
 
-            const subtotal =
-                producto.precio *
-                producto.cantidad;
+        const informacion = document.createElement("div");
 
+        const nombre = document.createElement("strong");
+        nombre.textContent = producto.nombre;
 
-            total += subtotal;
+        const detalle = document.createElement("p");
+        detalle.textContent =
+            `$${producto.precio.toFixed(2)} × ${producto.cantidad}`;
 
+        const controles = document.createElement("div");
+        controles.className = "controles-cantidad";
 
-            const item =
-                document.createElement("div");
+        const disminuir = document.createElement("button");
+        disminuir.type = "button";
+        disminuir.className = "btn-cantidad";
+        disminuir.textContent = "−";
+        disminuir.setAttribute("aria-label", "Disminuir cantidad");
+        disminuir.addEventListener("click", () => {
+            disminuirCantidad(indice);
+        });
 
+        const cantidad = document.createElement("span");
+        cantidad.className = "cantidad";
+        cantidad.textContent = producto.cantidad;
 
-            item.className =
-                "item-carrito";
+        const aumentar = document.createElement("button");
+        aumentar.type = "button";
+        aumentar.className = "btn-cantidad";
+        aumentar.textContent = "+";
+        aumentar.setAttribute("aria-label", "Aumentar cantidad");
+        aumentar.addEventListener("click", () => {
+            aumentarCantidad(indice);
+        });
 
+        controles.append(disminuir, cantidad, aumentar);
+        informacion.append(nombre, detalle, controles);
 
-            item.innerHTML = `
+        const acciones = document.createElement("div");
 
-                <div>
+        const subtotal = document.createElement("strong");
+        subtotal.textContent =
+            `$${(producto.precio * producto.cantidad).toFixed(2)}`;
 
-                    <strong>
-                        ${producto.nombre}
-                    </strong>
+        const salto = document.createElement("br");
 
-                    <p>
-                        $${producto.precio}
-                        ×
-                        ${producto.cantidad}
-                    </p>
+        const eliminar = document.createElement("button");
+        eliminar.type = "button";
+        eliminar.className = "eliminar";
+        eliminar.textContent = "🗑️ Eliminar";
+        eliminar.addEventListener("click", () => {
+            eliminarProducto(indice);
+        });
 
+        acciones.append(subtotal, salto, eliminar);
+        item.append(informacion, acciones);
+        lista.appendChild(item);
+    });
 
-                    <div
-                        class="controles-cantidad">
-
-                        <button
-                            type="button"
-                            class="btn-cantidad"
-                            onclick="disminuirCantidad(${indice})">
-
-                            −
-
-                        </button>
-
-
-                        <span class="cantidad">
-                            ${producto.cantidad}
-                        </span>
-
-
-                        <button
-                            type="button"
-                            class="btn-cantidad"
-                            onclick="aumentarCantidad(${indice})">
-
-                            +
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div>
-
-                    <strong>
-                        $${subtotal}
-                    </strong>
-
-                    <br>
-
-
-                    <button
-                        type="button"
-                        class="eliminar"
-                        onclick="eliminarProducto(${indice})">
-
-                        🗑️ Eliminar
-
-                    </button>
-
-                </div>
-
-            `;
-
-
-            lista.appendChild(item);
-
-        }
-    );
-
-
-    totalElemento.textContent =
-        total;
+    totalElemento.textContent = `$${obtenerTotal().toFixed(2)}`;
 }
 
 
@@ -181,15 +236,10 @@ function actualizarCarrito() {
 ========================================== */
 
 function aumentarCantidad(indice) {
+    if (!carrito[indice]) return;
 
-    if (
-        carrito[indice]
-    ) {
-
-        carrito[indice].cantidad++;
-
-        actualizarCarrito();
-    }
+    carrito[indice].cantidad++;
+    actualizarCarrito();
 }
 
 
@@ -198,25 +248,13 @@ function aumentarCantidad(indice) {
 ========================================== */
 
 function disminuirCantidad(indice) {
-
-    if (
-        !carrito[indice]
-    ) {
-
-        return;
-    }
-
+    if (!carrito[indice]) return;
 
     carrito[indice].cantidad--;
 
-
-    if (
-        carrito[indice].cantidad <= 0
-    ) {
-
+    if (carrito[indice].cantidad <= 0) {
         carrito.splice(indice, 1);
     }
-
 
     actualizarCarrito();
 }
@@ -227,379 +265,173 @@ function disminuirCantidad(indice) {
 ========================================== */
 
 function eliminarProducto(indice) {
-
-    if (
-        !carrito[indice]
-    ) {
-
-        return;
-    }
-
+    if (!carrito[indice]) return;
 
     carrito.splice(indice, 1);
-
-
     actualizarCarrito();
 }
 
 
 /* ==========================================
-   OBTENER TOTAL
+   CALCULAR TOTAL
 ========================================== */
 
 function obtenerTotal() {
-
-    return carrito.reduce(
-        (
-            total,
-            producto
-        ) => {
-
-            return total +
-                (
-                    producto.precio *
-                    producto.cantidad
-                );
-
-        },
-        0
-    );
+    return carrito.reduce((total, producto) => {
+        return total + producto.precio * producto.cantidad;
+    }, 0);
 }
 
 
 /* ==========================================
-   REALIZAR PEDIDO
+   ABRIR FORMULARIO DEL PEDIDO
 ========================================== */
 
 function realizarPedido() {
-
-    if (
-        carrito.length === 0
-    ) {
-
-        alert(
-            "🛒 Tu carrito está vacío."
-        );
-
+    if (carrito.length === 0) {
+        alert("🛒 Tu carrito está vacío.");
         return;
     }
 
+    const ventana = document.getElementById("ventana-pago");
+    const totalPago = document.getElementById("total-pago");
 
-    const ventana =
-        document.getElementById(
-            "ventana-pago"
-        );
+    if (!ventana || !totalPago) return;
 
-
-    const total =
-        obtenerTotal();
-
-
-    document.getElementById(
-        "total-pago"
-    ).textContent = total;
-
-
-    ventana.style.display =
-        "flex";
+    totalPago.textContent = `$${obtenerTotal().toFixed(2)}`;
+    ventana.style.display = "flex";
+    ventana.setAttribute("aria-hidden", "false");
 }
 
 
 /* ==========================================
-   CERRAR FORMULARIO
+   CERRAR FORMULARIO DEL PEDIDO
 ========================================== */
 
 function cerrarFormulario() {
+    const ventana = document.getElementById("ventana-pago");
 
-    document.getElementById(
-        "ventana-pago"
-    ).style.display =
-        "none";
+    if (!ventana) return;
+
+    ventana.style.display = "none";
+    ventana.setAttribute("aria-hidden", "true");
 }
 
 
 /* ==========================================
-   MOSTRAR DATOS DE PAGO
+   MOSTRAR MÉTODO DE PAGO
 ========================================== */
 
 function mostrarDatosPago() {
+    const metodo = document.getElementById("pago").value;
+    const transferencia = document.getElementById("datos-transferencia");
+    const tarjeta = document.getElementById("datos-tarjeta");
 
-    const metodo =
-        document.getElementById(
-            "pago"
-        ).value;
-
-
-    const transferencia =
-        document.getElementById(
-            "datos-transferencia"
-        );
-
-
-    const tarjeta =
-        document.getElementById(
-            "datos-tarjeta"
-        );
-
-
-    // Ocultar ambos
-
-    transferencia.style.display =
-        "none";
-
-    tarjeta.style.display =
-        "none";
-
+    transferencia.style.display = "none";
+    tarjeta.style.display = "none";
 
     quitarRequiredTransferencia();
-
     quitarRequiredTarjeta();
 
+    if (metodo === "Transferencia") {
+        transferencia.style.display = "block";
 
-    /* TRANSFERENCIA */
-
-    if (
-        metodo === "Transferencia"
-    ) {
-
-        transferencia.style.display =
-            "block";
-
-
-        document.getElementById(
-            "banco-transferencia"
-        ).required = true;
-
-
-        document.getElementById(
-            "referencia-transferencia"
-        ).required = true;
-
-
-        document.getElementById(
-            "monto-transferencia"
-        ).required = true;
+        document.getElementById("banco-transferencia").required = true;
+        document.getElementById("referencia-transferencia").required = true;
+        document.getElementById("monto-transferencia").required = true;
     }
 
+    if (metodo === "Tarjeta") {
+        tarjeta.style.display = "block";
 
-    /* TARJETA */
-
-    if (
-        metodo === "Tarjeta"
-    ) {
-
-        tarjeta.style.display =
-            "block";
-
-
-        document.getElementById(
-            "titular"
-        ).required = true;
-
-
-        document.getElementById(
-            "numero-tarjeta"
-        ).required = true;
-
-
-        document.getElementById(
-            "vencimiento"
-        ).required = true;
-
-
-        document.getElementById(
-            "cvv"
-        ).required = true;
+        document.getElementById("titular").required = true;
+        document.getElementById("numero-tarjeta").required = true;
+        document.getElementById("vencimiento").required = true;
+        document.getElementById("cvv").required = true;
     }
 }
 
 
 /* ==========================================
-   QUITAR REQUIRED TRANSFERENCIA
+   QUITAR VALIDACIÓN DE TRANSFERENCIA
 ========================================== */
 
 function quitarRequiredTransferencia() {
-
-    document.getElementById(
-        "banco-transferencia"
-    ).required = false;
-
-
-    document.getElementById(
-        "referencia-transferencia"
-    ).required = false;
-
-
-    document.getElementById(
+    [
+        "banco-transferencia",
+        "referencia-transferencia",
         "monto-transferencia"
-    ).required = false;
+    ].forEach(id => {
+        document.getElementById(id).required = false;
+    });
 }
 
 
 /* ==========================================
-   QUITAR REQUIRED TARJETA
+   QUITAR VALIDACIÓN DE TARJETA
 ========================================== */
 
 function quitarRequiredTarjeta() {
-
-    document.getElementById(
-        "titular"
-    ).required = false;
-
-
-    document.getElementById(
-        "numero-tarjeta"
-    ).required = false;
-
-
-    document.getElementById(
-        "vencimiento"
-    ).required = false;
-
-
-    document.getElementById(
+    [
+        "titular",
+        "numero-tarjeta",
+        "vencimiento",
         "cvv"
-    ).required = false;
+    ].forEach(id => {
+        document.getElementById(id).required = false;
+    });
 }
 
 
 /* ==========================================
-   FORMATO NÚMERO DE TARJETA
+   FORMATO DE TARJETA
 ========================================== */
 
-document
-    .getElementById("numero-tarjeta")
-    .addEventListener(
-        "input",
-        function () {
+document.getElementById("numero-tarjeta").addEventListener(
+    "input",
+    function () {
+        let numero = this.value.replace(/\D/g, "").slice(0, 16);
 
-            let numero =
-                this.value.replace(
-                    /\D/g,
-                    ""
-                );
-
-
-            numero =
-                numero.substring(
-                    0,
-                    16
-                );
-
-
-            let resultado = "";
-
-
-            for (
-                let i = 0;
-                i < numero.length;
-                i++
-            ) {
-
-                if (
-                    i > 0 &&
-                    i % 4 === 0
-                ) {
-
-                    resultado += " ";
-                }
-
-
-                resultado +=
-                    numero[i];
-            }
-
-
-            this.value =
-                resultado;
-        }
-    );
+        this.value = numero.replace(/(.{4})/g, "$1 ").trim();
+    }
+);
 
 
 /* ==========================================
-   FORMATO VENCIMIENTO
+   FORMATO DE VENCIMIENTO
 ========================================== */
 
-document
-    .getElementById("vencimiento")
-    .addEventListener(
-        "input",
-        function () {
+document.getElementById("vencimiento").addEventListener(
+    "input",
+    function () {
+        let fecha = this.value.replace(/\D/g, "").slice(0, 4);
 
-            let fecha =
-                this.value.replace(
-                    /\D/g,
-                    ""
-                );
-
-
-            fecha =
-                fecha.substring(
-                    0,
-                    4
-                );
-
-
-            if (
-                fecha.length >= 3
-            ) {
-
-                fecha =
-                    fecha.substring(
-                        0,
-                        2
-                    )
-                    + "/"
-                    +
-                    fecha.substring(
-                        2
-                    );
-            }
-
-
-            this.value =
-                fecha;
+        if (fecha.length > 2) {
+            fecha = fecha.slice(0, 2) + "/" + fecha.slice(2);
         }
-    );
+
+        this.value = fecha;
+    }
+);
 
 
 /* ==========================================
-   SOLO NÚMEROS CVV
+   SOLO NÚMEROS EN CVV Y TELÉFONO
 ========================================== */
 
-document
-    .getElementById("cvv")
-    .addEventListener(
-        "input",
-        function () {
+document.getElementById("cvv").addEventListener(
+    "input",
+    function () {
+        this.value = this.value.replace(/\D/g, "").slice(0, 4);
+    }
+);
 
-            this.value =
-                this.value.replace(
-                    /\D/g,
-                    ""
-                );
-        }
-    );
-
-
-/* ==========================================
-   SOLO NÚMEROS TELÉFONO
-========================================== */
-
-document
-    .getElementById("telefono")
-    .addEventListener(
-        "input",
-        function () {
-
-            this.value =
-                this.value.replace(
-                    /\D/g,
-                    ""
-                );
-
-        }
-    );
+document.getElementById("telefono").addEventListener(
+    "input",
+    function () {
+        this.value = this.value.replace(/\D/g, "").slice(0, 10);
+    }
+);
 
 
 /* ==========================================
@@ -607,58 +439,22 @@ document
 ========================================== */
 
 function validarTransferencia() {
+    const banco = document.getElementById("banco-transferencia").value.trim();
+    const referencia = document.getElementById("referencia-transferencia").value.trim();
+    const monto = Number(document.getElementById("monto-transferencia").value);
+    const total = obtenerTotal();
 
-    const banco =
-        document.getElementById(
-            "banco-transferencia"
-        ).value.trim();
-
-
-    const referencia =
-        document.getElementById(
-            "referencia-transferencia"
-        ).value.trim();
-
-
-    const monto =
-        Number(
-            document.getElementById(
-                "monto-transferencia"
-            ).value
-        );
-
-
-    const total =
-        obtenerTotal();
-
-
-    if (
-        banco === "" ||
-        referencia === "" ||
-        !monto ||
-        monto <= 0
-    ) {
-
-        alert(
-            "⚠️ Completa todos los datos de la transferencia."
-        );
-
+    if (!banco || !referencia || !Number.isFinite(monto) || monto <= 0) {
+        alert("⚠️ Completa todos los datos de la transferencia.");
         return false;
     }
 
-
-    if (
-        monto !== total
-    ) {
-
+    if (Math.abs(monto - total) > 0.009) {
         alert(
-            "⚠️ El monto de la transferencia debe coincidir con el total del pedido: $"
-            + total
+            `⚠️ El monto debe coincidir con el total del pedido: $${total.toFixed(2)}`
         );
-
         return false;
     }
-
 
     return true;
 }
@@ -669,385 +465,119 @@ function validarTransferencia() {
 ========================================== */
 
 function confirmarPedido(evento) {
-
     evento.preventDefault();
 
-
-    const nombre =
-        document.getElementById(
-            "nombre"
-        ).value.trim();
-
-
-    const telefono =
-        document.getElementById(
-            "telefono"
-        ).value.trim();
-
-
-    const direccion =
-        document.getElementById(
-            "direccion"
-        ).value.trim();
-
-
-    const pago =
-        document.getElementById(
-            "pago"
-        ).value;
-
-
-    /* VALIDAR TRANSFERENCIA */
-
-    if (
-        pago === "Transferencia"
-    ) {
-
-        if (
-            !validarTransferencia()
-        ) {
-
-            return;
-        }
+    if (carrito.length === 0) {
+        alert("🛒 Tu carrito está vacío.");
+        cerrarFormulario();
+        return;
     }
 
+    const formulario = document.getElementById("formulario-pedido");
 
-    /* VALIDAR TARJETA */
+    if (!formulario.reportValidity()) return;
 
-    if (
-        pago === "Tarjeta"
-    ) {
+    const nombre = document.getElementById("nombre").value.trim();
+    const telefono = document.getElementById("telefono").value.trim();
+    const direccion = document.getElementById("direccion").value.trim();
+    const pago = document.getElementById("pago").value;
 
-        const numero =
-            document.getElementById(
-                "numero-tarjeta"
-            ).value
-            .replace(/\s/g, "");
+    if (!nombre || !direccion || !/^\d{10}$/.test(telefono)) {
+        alert("⚠️ Revisa tu nombre, teléfono y dirección.");
+        return;
+    }
 
+    if (pago === "Transferencia" && !validarTransferencia()) {
+        return;
+    }
 
-        const vencimiento =
-            document.getElementById(
-                "vencimiento"
-            ).value;
-
-
-        const cvv =
-            document.getElementById(
-                "cvv"
-            ).value;
-
+    if (pago === "Tarjeta") {
+        const numero = document.getElementById("numero-tarjeta").value.replace(/\D/g, "");
+        const vencimiento = document.getElementById("vencimiento").value;
+        const cvv = document.getElementById("cvv").value;
 
         if (
             numero.length !== 16 ||
-            vencimiento.length !== 5 ||
-            cvv.length < 3
+            !/^(0[1-9]|1[0-2])\/\d{2}$/.test(vencimiento) ||
+            !/^\d{3,4}$/.test(cvv)
         ) {
-
-            alert(
-                "⚠️ Revisa los datos de la tarjeta."
-            );
-
+            alert("⚠️ Revisa los datos ficticios de la tarjeta.");
             return;
         }
     }
 
+    document.getElementById("confirmacion-nombre").textContent = nombre;
+    document.getElementById("confirmacion-telefono").textContent = telefono;
+    document.getElementById("confirmacion-direccion").textContent = direccion;
+    document.getElementById("confirmacion-pago").textContent = pago;
+    document.getElementById("confirmacion-total").textContent =
+        `$${obtenerTotal().toFixed(2)}`;
 
-    /* TOTAL */
+    /* MOSTRAR PRODUCTOS */
 
-    const total =
-        obtenerTotal();
+    const listaProductos = document.getElementById("confirmacion-productos");
+    listaProductos.replaceChildren();
 
+    carrito.forEach(producto => {
+        const elemento = document.createElement("p");
 
-    /* DATOS DEL CLIENTE */
+        elemento.textContent =
+            `${producto.nombre} — ${producto.cantidad} × ` +
+            `$${producto.precio.toFixed(2)} = ` +
+            `$${(producto.cantidad * producto.precio).toFixed(2)}`;
 
-    document.getElementById(
-        "confirmacion-nombre"
-    ).textContent =
-        nombre;
+        listaProductos.appendChild(elemento);
+    });
 
+    /* MOSTRAR INFORMACIÓN DEL PAGO */
 
-    document.getElementById(
-        "confirmacion-telefono"
-    ).textContent =
-        telefono;
+    const datosPago = document.getElementById("confirmacion-datos-pago");
+    datosPago.replaceChildren();
 
+    const agregarDato = texto => {
+        const parrafo = document.createElement("p");
+        parrafo.textContent = texto;
+        datosPago.appendChild(parrafo);
+    };
 
-    document.getElementById(
-        "confirmacion-direccion"
-    ).textContent =
-        direccion;
-
-
-    document.getElementById(
-        "confirmacion-pago"
-    ).textContent =
-        pago;
-
-
-    document.getElementById(
-        "confirmacion-total"
-    ).textContent =
-        total;
-
-
-    /* ==========================================
-       PRODUCTOS
-    =========================================== */
-
-    const listaProductos =
-        document.getElementById(
-            "confirmacion-productos"
-        );
-
-
-    listaProductos.innerHTML =
-        "";
-
-
-    carrito.forEach(
-        producto => {
-
-            const subtotal =
-                producto.precio *
-                producto.cantidad;
-
-
-            const elemento =
-                document.createElement(
-                    "div"
-                );
-
-
-            elemento.className =
-                "producto-confirmado";
-
-
-            elemento.innerHTML = `
-
-                <div>
-
-                    <div class="nombre">
-                        ${producto.nombre}
-                    </div>
-
-                    <div class="cantidad">
-                        $${producto.precio}
-                        ×
-                        ${producto.cantidad}
-                    </div>
-
-                </div>
-
-
-                <div class="subtotal">
-                    $${subtotal}
-                </div>
-
-            `;
-
-
-            listaProductos.appendChild(
-                elemento
-            );
-
-        }
-    );
-
-
-    /* ==========================================
-       DATOS DEL PAGO
-    =========================================== */
-
-    const datosPago =
-        document.getElementById(
-            "confirmacion-datos-pago"
-        );
-
-
-    datosPago.innerHTML =
-        "";
-
-
-    /* TRANSFERENCIA */
-
-    if (
-        pago === "Transferencia"
-    ) {
-
-        const banco =
-            document.getElementById(
-                "banco-transferencia"
-            ).value.trim();
-
-
-        const referencia =
-            document.getElementById(
-                "referencia-transferencia"
-            ).value.trim();
-
-
-        const monto =
-            document.getElementById(
-                "monto-transferencia"
-            ).value;
-
-
-        datosPago.innerHTML = `
-
-            <div class="dato-pago">
-
-                <p>
-                    <strong>Banco:</strong>
-                    ${banco}
-                </p>
-
-                <p>
-                    <strong>Referencia:</strong>
-                    ${referencia}
-                </p>
-
-                <p>
-                    <strong>Monto:</strong>
-                    $${monto}
-                </p>
-
-                <p>
-                    🏦 Transferencia registrada
-                    como simulación.
-                </p>
-
-            </div>
-
-        `;
+    if (pago === "Transferencia") {
+        agregarDato("Banco: " + document.getElementById("banco-transferencia").value.trim());
+        agregarDato("Referencia: " + document.getElementById("referencia-transferencia").value.trim());
+        agregarDato("Monto declarado: $" + Number(
+            document.getElementById("monto-transferencia").value
+        ).toFixed(2));
+        agregarDato("Simulación educativa. Transferencia no verificada.");
+    } else if (pago === "Tarjeta") {
+        const numero = document.getElementById("numero-tarjeta").value.replace(/\D/g, "");
+        agregarDato("Tarjeta ficticia terminada en **** " + numero.slice(-4));
+        agregarDato("Pago de demostración. No se realizó ningún cargo.");
+    } else if (pago === "Efectivo") {
+        agregarDato("Forma de pago seleccionada: efectivo.");
+    } else if (pago === "Pago al entregar") {
+        agregarDato("Forma de pago seleccionada: pago al entregar.");
     }
 
+    /* MOSTRAR CONFIRMACIÓN */
 
-    /* TARJETA */
-
-    else if (
-        pago === "Tarjeta"
-    ) {
-
-        const numero =
-            document.getElementById(
-                "numero-tarjeta"
-            ).value
-            .replace(/\s/g, "");
-
-
-        const ultimos4 =
-            numero.slice(-4);
-
-
-        datosPago.innerHTML = `
-
-            <div class="dato-pago">
-
-                <p>
-                    💳 Pago con tarjeta
-                    registrado como simulación.
-                </p>
-
-                <p>
-                    <strong>
-                        Tarjeta terminada en:
-                    </strong>
-
-                    **** ${ultimos4}
-
-                </p>
-
-            </div>
-
-        `;
-    }
-
-
-    /* EFECTIVO */
-
-    else if (
-        pago === "Efectivo"
-    ) {
-
-        datosPago.innerHTML = `
-
-            <div class="dato-pago">
-
-                💵 Pago en efectivo seleccionado.
-
-            </div>
-
-        `;
-    }
-
-
-    /* PAGO AL ENTREGAR */
-
-    else if (
-        pago === "Pago al entregar"
-    ) {
-
-        datosPago.innerHTML = `
-
-            <div class="dato-pago">
-
-                🚚 El pago se realizará
-                al momento de recibir
-                el pedido.
-
-            </div>
-
-        `;
-    }
-
-
-    /* ==========================================
-       MOSTRAR CONFIRMACIÓN
-    =========================================== */
-
-    document.getElementById(
-        "ventana-confirmacion"
-    ).style.display =
-        "flex";
-
-
-    /* CERRAR FORMULARIO */
+    const confirmacion = document.getElementById("ventana-confirmacion");
+    confirmacion.style.display = "flex";
+    confirmacion.setAttribute("aria-hidden", "false");
 
     cerrarFormulario();
-
 
     /* VACIAR CARRITO */
 
     carrito = [];
-
     actualizarCarrito();
-
 
     /* LIMPIAR FORMULARIO */
 
-    document
-        .getElementById(
-            "formulario-pedido"
-        )
-        .reset();
+    formulario.reset();
 
-
-    /* OCULTAR PAGOS */
-
-    document.getElementById(
-        "datos-transferencia"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "datos-tarjeta"
-    ).style.display =
-        "none";
-
+    document.getElementById("datos-transferencia").style.display = "none";
+    document.getElementById("datos-tarjeta").style.display = "none";
 
     quitarRequiredTransferencia();
-
     quitarRequiredTarjeta();
 }
 
@@ -1057,69 +587,74 @@ function confirmarPedido(evento) {
 ========================================== */
 
 function cerrarConfirmacion() {
+    const ventana = document.getElementById("ventana-confirmacion");
 
-    document.getElementById(
-        "ventana-confirmacion"
-    ).style.display =
-        "none";
+    ventana.style.display = "none";
+    ventana.setAttribute("aria-hidden", "true");
 }
 
 
 /* ==========================================
-   CERRAR MODAL AL HACER CLIC AFUERA
+   EVENTOS DE LOS BOTONES
 ========================================== */
 
-document
-    .getElementById("ventana-pago")
-    .addEventListener(
-        "click",
-        function (evento) {
+document.getElementById("boton-comprar").addEventListener(
+    "click",
+    realizarPedido
+);
 
-            if (
-                evento.target === this
-            ) {
+document.getElementById("cerrar-formulario").addEventListener(
+    "click",
+    cerrarFormulario
+);
 
-                cerrarFormulario();
-            }
+document.getElementById("cerrar-confirmacion").addEventListener(
+    "click",
+    cerrarConfirmacion
+);
 
-        }
-    );
+document.getElementById("boton-finalizar").addEventListener(
+    "click",
+    cerrarConfirmacion
+);
 
+document.getElementById("pago").addEventListener(
+    "change",
+    mostrarDatosPago
+);
 
-document
-    .getElementById("ventana-confirmacion")
-    .addEventListener(
-        "click",
-        function (evento) {
-
-            if (
-                evento.target === this
-            ) {
-
-                cerrarConfirmacion();
-            }
-
-        }
-    );
+document.getElementById("formulario-pedido").addEventListener(
+    "submit",
+    confirmarPedido
+);
 
 
 /* ==========================================
-   ENVIAR FORMULARIO
+   CERRAR MODALES AL HACER CLIC AFUERA
 ========================================== */
 
-document
-    .getElementById(
-        "formulario-pedido"
-    )
-    .addEventListener(
-        "submit",
-        confirmarPedido
-    );
+document.getElementById("ventana-pago").addEventListener(
+    "click",
+    function (evento) {
+        if (evento.target === this) {
+            cerrarFormulario();
+        }
+    }
+);
+
+document.getElementById("ventana-confirmacion").addEventListener(
+    "click",
+    function (evento) {
+        if (evento.target === this) {
+            cerrarConfirmacion();
+        }
+    }
+);
 
 
 /* ==========================================
-   INICIAR CARRITO
+   INICIAR PÁGINA
 ========================================== */
 
+mostrarProductos();
 actualizarCarrito();
-
