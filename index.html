@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#b8263a">
-    <meta name="description" content="Compra flores y crea tu propio ramo personalizado en El Jardín de Snoopy.">
+    <meta name="description" content="Compra flores en El Jardín de Snoopy.">
 
-    <title>El Jardín de Snoopy | Flores personalizadas</title>
+    <title>El Jardín de Snoopy | Flores</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
@@ -20,7 +20,6 @@
 
     <nav class="navegacion" aria-label="Navegación principal">
         <a href="#productos">Nuestros productos</a>
-        <a href="#personalizacion">Personaliza tu ramo</a>
         <a href="#carrito">Mi carrito</a>
     </nav>
 
@@ -35,89 +34,6 @@
             <div id="contenedor-productos" class="contenedor-productos">
                 <p class="cargando">Cargando nuestros arreglos...</p>
             </div>
-        </section>
-
-        <!-- PERSONALIZACIÓN DE RAMOS -->
-        <section id="personalizacion" class="seccion personalizacion">
-            <h2>💐 ¡Personaliza tu propio ramo!</h2>
-            <p class="introduccion">
-                Tú eliges las flores, el color, el tamaño, la envoltura
-                y una dedicatoria especial.
-            </p>
-
-            <form id="formulario-personalizacion">
-                <div class="campo-personalizacion">
-                    <label for="tipo-flores">1. ¿Qué flores deseas?</label>
-                    <select id="tipo-flores" required>
-                        <option value="">Selecciona las flores</option>
-                        <option value="Rosas">🌹 Rosas</option>
-                        <option value="Girasoles">🌻 Girasoles</option>
-                        <option value="Tulipanes">🌷 Tulipanes</option>
-                        <option value="Margaritas">🌼 Margaritas</option>
-                        <option value="Lirios">🤍 Lirios</option>
-                        <option value="Orquídeas">🌺 Orquídeas</option>
-                        <option value="Flores mixtas">💐 Flores mixtas</option>
-                    </select>
-                </div>
-
-                <div class="campo-personalizacion">
-                    <label for="color-flores">2. Elige el color</label>
-                    <select id="color-flores" required>
-                        <option value="">Selecciona un color</option>
-                        <option value="Rojo">❤️ Rojo</option>
-                        <option value="Rosa">🩷 Rosa</option>
-                        <option value="Blanco">🤍 Blanco</option>
-                        <option value="Amarillo">💛 Amarillo</option>
-                        <option value="Morado">💜 Morado</option>
-                        <option value="Naranja">🧡 Naranja</option>
-                        <option value="Multicolor">🌈 Multicolor</option>
-                    </select>
-                </div>
-
-                <div class="campo-personalizacion">
-                    <label for="tamano-ramo">3. Tamaño del ramo</label>
-                    <select id="tamano-ramo" required>
-                        <option value="">Selecciona el tamaño</option>
-                        <option value="Pequeño">Pequeño — $250</option>
-                        <option value="Mediano">Mediano — $400</option>
-                        <option value="Grande">Grande — $600</option>
-                    </select>
-                </div>
-
-                <div class="campo-personalizacion">
-                    <label for="envoltura-ramo">4. Tipo de envoltura</label>
-                    <select id="envoltura-ramo" required>
-                        <option value="">Selecciona la envoltura</option>
-                        <option value="Papel kraft">Papel kraft — Gratis</option>
-                        <option value="Papel rosa">Papel rosa — $30</option>
-                        <option value="Papel elegante">Papel elegante — $50</option>
-                        <option value="Envoltura premium">Envoltura premium — $80</option>
-                    </select>
-                </div>
-
-                <div class="campo-personalizacion">
-                    <label for="mensaje-ramo">5. Dedicatoria especial</label>
-                    <textarea
-                        id="mensaje-ramo"
-                        maxlength="200"
-                        placeholder="Ej. Para alguien que hace florecer mis días..."
-                    ></textarea>
-                    <small>Opcional. Máximo 200 caracteres.</small>
-                </div>
-
-                <div class="precio-personalizado">
-                    <p>Precio estimado de tu creación</p>
-                    <h3 id="precio-personalizado">$0</h3>
-                    <small>El precio depende del tamaño y la envoltura.</small>
-                </div>
-
-                <button type="submit" class="boton-personalizar">
-                    💐 Agregar mi ramo personalizado
-                </button>
-
-                <p id="mensaje-personalizacion" class="mensaje-estado"
-                   role="status" aria-live="polite"></p>
-            </form>
         </section>
 
         <!-- CARRITO -->
@@ -262,7 +178,7 @@
             </div>
 
             <div class="detalle-pedido">
-                <h3>🌷 Productos y personalizaciones</h3>
+                <h3>🌷 Productos</h3>
                 <div id="confirmacion-productos"></div>
             </div>
 
