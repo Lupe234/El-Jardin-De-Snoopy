@@ -1,870 +1,227 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>El Jardín de Snoopy</title>
-
+    <meta name="theme-color" content="#fff8f6">
+    <meta name="description" content="Descubre ramos y arreglos florales en El Jardín de Snoopy. Flores para regalar amor y alegría.">
+    <title>El Jardín de Snoopy | Flores con amor</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
-
 <body>
 
-    <!-- ==========================================
-         ENCABEZADO
-    =========================================== -->
+    <header class="encabezado" id="inicio">
+        <a class="marca" href="#inicio">
+            <span class="marca-icono">🌷</span>
+            <span>El Jardín <small>de Snoopy</small></span>
+        </a>
 
-    <header>
-
-        <h1>🌸 El Jardín de Snoopy 🌸</h1>
-
-        <p>
-            Detalles que florecen con amor
-        </p>
-
+        <nav class="navegacion" aria-label="Navegación principal">
+            <a href="#inicio">Inicio</a>
+            <a href="#productos">Nuestros arreglos</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="#carrito">Mi carrito <span id="contador-carrito">0</span></a>
+        </nav>
     </header>
 
-
     <main>
-
-        <!-- ==========================================
-             PRODUCTOS
-        =========================================== -->
-
-        <section class="productos">
-
-            <h2>🌷 Nuestros productos</h2>
-
-            <div class="contenedor-productos">
-
-
-                <!-- PRODUCTO 1 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\ramo de flores.jpeg"
-                        alt="Ramo de flores">
-
-                    <h3>Ramo de Flores</h3>
-
-                    <p class="precio">$350</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Ramo de Flores', 350)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 2 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\OIP.webp"
-                        alt="Rosas">
-
-                    <h3>Ramo de Rosas</h3>
-
-                    <p class="precio">$400</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Ramo de Rosas', 400)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 3 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\ramo de girasoles.jpeg"
-                        alt="Girasoles">
-
-                    <h3>Ramo de Girasoles</h3>
-
-                    <p class="precio">$300</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Ramo de Girasoles', 300)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 4 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\Ramo-de-tulipanes-rosados.jpeg"
-                        alt="Tulipanes">
-
-                    <h3>Tulipanes</h3>
-
-                    <p class="precio">$450</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Tulipanes', 450)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 5 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\rosas rosadas.jpeg"
-                        alt="Rosas rosadas">
-
-                    <h3>Rosas Rosadas</h3>
-
-                    <p class="precio">$380</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Rosas Rosadas', 380)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 6 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\orquideas.jpeg"
-                        alt="Orquídea">
-
-                    <h3>Orquídea</h3>
-
-                    <p class="precio">$500</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Orquídea', 500)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 7 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\flores blancas.jpeg"
-                        alt="Flores blancas">
-
-                    <h3>Flores Blancas</h3>
-
-                    <p class="precio">$320</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Flores Blancas', 320)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 8 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\arreglo floral.jpeg"
-                        alt="Arreglo floral">
-
-                    <h3>Arreglo Floral</h3>
-
-                    <p class="precio">$550</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Arreglo Floral', 550)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 9 -->
-
-                <div class="producto">
-
-                    <img
-                        src= "C:\Users\pc2\Documents\floreria\imagenes\OIP (1).webp"
-                        alt="Margaritas">
-
-                    <h3>Margaritas</h3>
-
-                    <p class="precio">$280</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Margaritas', 280)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 10 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\rosas rojas.jpeg"
-                        alt="Rosas Rojas">
-
-                    <h3>Rosas Rojas</h3>
-
-                    <p class="precio">$450</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Rosas Rojas', 450)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 11 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\ramo de lirios.jpeg"
-                        alt="Lirios">
-
-                    <h3>Ramo de Lirios</h3>
-
-                    <p class="precio">$420</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Ramo de Lirios', 420)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 12 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\OIP.webp"
-                        alt="Flores de Primavera">
-
-                    <h3>Flores de Primavera</h3>
-
-                    <p class="precio">$390</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Flores de Primavera', 390)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 13 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\rosas blancas+.jpeg"
-                        alt="Rosas Blancas">
-
-                    <h3>Rosas Blancas</h3>
-
-                    <p class="precio">$430</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Rosas Blancas', 430)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 14 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\orquideas.jpeg"
-                        alt="Orquídeas Rosadas">
-
-                    <h3>Orquídeas Rosadas</h3>
-
-                    <p class="precio">$580</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Orquídeas Rosadas', 580)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 15 -->
-
-                <div class="producto">
-
-                    <img
-                        src="https://github.com/Lupe234/El-Jardin-De-Snoopy/blob/main/bouquet%20romantico.jpeg?raw=true
-                        alt="Bouquet Romántico">
-
-                    <h3>Bouquet Romántico</h3>
-
-                    <p class="precio">$600</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Bouquet Romántico', 600)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-
-                <!-- PRODUCTO 16 -->
-
-                <div class="producto">
-
-                    <img
-                        src="C:\Users\pc2\Documents\floreria\imagenes\arreglo especial.jpeg"
-                        alt="Arreglo Especial">
-
-                    <h3>Arreglo Especial</h3>
-
-                    <p class="precio">$700</p>
-
-                    <button
-                        type="button"
-                        onclick="agregar('Arreglo Especial', 700)">
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
+        <section class="portada">
+            <div class="portada-contenido">
+                <span class="etiqueta">FLORES QUE ENAMORAN</span>
+                <h1>Un detalle bonito<br>puede <em>florecer</em> un día.</h1>
+                <p>Ramos y arreglos florales para regalar sonrisas, celebrar momentos y decir lo que sientes.</p>
+                <a class="boton boton-principal" href="#productos">Descubrir flores <span>↗</span></a>
+                <div class="portada-nota">♡ Preparados con cariño para ti</div>
             </div>
-
+            <div class="portada-imagen" role="img" aria-label="Ilustración de flores y naturaleza">
+                <div class="circulo-decorativo"></div>
+                <div class="flor-grande">💐</div>
+                <span class="flotante flotante-uno">✿</span>
+                <span class="flotante flotante-dos">✿</span>
+                <span class="flotante flotante-tres">♡</span>
+                <div class="tarjeta-flotante">
+                    <span>Hecho con amor</span>
+                    <strong>Para alguien especial ♡</strong>
+                </div>
+            </div>
         </section>
 
-
-        <!-- ==========================================
-             CARRITO
-        =========================================== -->
-
-        <section class="carrito">
-
-            <h2>🛒 Carrito</h2>
-
-            <div id="lista-carrito">
-
-                <p>Tu carrito está vacío.</p>
-
-            </div>
-
-
-            <div class="total">
-
-                <h3>
-                    Total:
-                    $<span id="total">0</span>
-                </h3>
-
-            </div>
-
-
-            <button
-                type="button"
-                class="comprar"
-                onclick="realizarPedido()">
-
-                💳 Realizar pedido
-
-            </button>
-
+        <section class="beneficios" aria-label="Beneficios">
+            <div><span>🌸</span><p><strong>Arreglos especiales</strong><small>Para cada ocasión</small></p></div>
+            <div><span>🎀</span><p><strong>Detalles con amor</strong><small>Bonitos y delicados</small></p></div>
+            <div><span>💌</span><p><strong>Fácil de pedir</strong><small>Elige tus favoritos</small></p></div>
         </section>
 
+        <section class="seccion catalogo" id="productos">
+            <div class="titulo-seccion">
+                <div>
+                    <span class="etiqueta">NUESTRO PEQUEÑO JARDÍN</span>
+                    <h2>Flores para cada <em>sentimiento</em></h2>
+                    <p>Encuentra ese detalle que dice más que mil palabras.</p>
+                </div>
+                <span class="adorno-titulo">✿</span>
+            </div>
+
+            <div class="filtros" aria-label="Filtrar productos">
+                <button class="filtro activo" type="button" data-filtro="todos">Todos</button>
+                <button class="filtro" type="button" data-filtro="ramos">Ramos</button>
+                <button class="filtro" type="button" data-filtro="rosas">Rosas</button>
+                <button class="filtro" type="button" data-filtro="especiales">Arreglos especiales</button>
+            </div>
+
+            <div class="contenedor-productos" id="contenedor-productos">
+                <p class="cargando">Preparando nuestro jardín… 🌷</p>
+            </div>
+        </section>
+
+        <section class="mensaje-jardin" id="nosotros">
+            <span class="mensaje-flor">🌼</span>
+            <div>
+                <span class="etiqueta">UN POQUITO DE TERNURA</span>
+                <h2>Los pequeños detalles<br>hacen florecer grandes momentos.</h2>
+                <p>En El Jardín de Snoopy, cada flor es una oportunidad para compartir cariño.</p>
+            </div>
+            <a href="#productos" class="boton boton-claro">Elegir un ramo ♡</a>
+        </section>
+
+        <section class="seccion carrito-seccion" id="carrito">
+            <div class="titulo-seccion">
+                <div>
+                    <span class="etiqueta">TU SELECCIÓN FLORAL</span>
+                    <h2>Tu carrito <em>de flores</em></h2>
+                    <p>Revisa tus favoritos antes de continuar.</p>
+                </div>
+                <span class="carrito-icono">🛍️</span>
+            </div>
+
+            <div class="carrito-panel">
+                <div id="lista-carrito" aria-live="polite">
+                    <p class="carrito-vacio">Tu carrito está esperando flores. 🌷</p>
+                </div>
+                <div class="carrito-pie">
+                    <div>
+                        <span>Subtotal de tu pedido</span>
+                        <strong id="total">$0.00</strong>
+                    </div>
+                    <button type="button" class="boton boton-principal" id="boton-comprar" disabled>
+                        Continuar con mi pedido <span>→</span>
+                    </button>
+                </div>
+                <p class="nota-general">Los precios están expresados en pesos mexicanos (MXN).</p>
+            </div>
+        </section>
     </main>
 
-
-    <!-- ==========================================
-         FORMULARIO DEL PEDIDO
-    =========================================== -->
-
-    <div
-        id="ventana-pago"
-        class="modal">
-
-        <div class="formulario">
-
-            <span
-                class="cerrar"
-                onclick="cerrarFormulario()">
-
-                ×
-
-            </span>
-
-
-            <h2>🌸 Datos del pedido</h2>
-
-
-            <form id="formulario-pedido">
-
-
-                <!-- NOMBRE -->
-
-                <label for="nombre">
-                    Nombre completo
-                </label>
-
-                <input
-                    type="text"
-                    id="nombre"
-                    required
-                    placeholder="Escribe tu nombre">
-
-
-                <!-- TELÉFONO -->
-
-                <label for="telefono">
-                    Teléfono
-                </label>
-
-                <input
-                    type="tel"
-                    id="telefono"
-                    required
-                    placeholder="Ej. 9991234567"
-                    maxlength="10"
-                    inputmode="numeric">
-
-
-                <!-- DIRECCIÓN -->
-
-                <label for="direccion">
-                    Dirección
-                </label>
-
-                <textarea
-                    id="direccion"
-                    required
-                    placeholder="Calle, número, colonia..."></textarea>
-
-
-                <!-- FORMA DE PAGO -->
-
-                <label for="pago">
-                    Forma de pago
-                </label>
-
-                <select
-                    id="pago"
-                    required
-                    onchange="mostrarDatosPago()">
-
-                    <option value="">
-                        Selecciona una opción
-                    </option>
-
-                    <option value="Efectivo">
-                        💵 Efectivo
-                    </option>
-
-                    <option value="Transferencia">
-                        🏦 Transferencia
-                    </option>
-
-                    <option value="Pago al entregar">
-                        🚚 Pago al entregar
-                    </option>
-
-                    <option value="Tarjeta">
-                        💳 Tarjeta
-                    </option>
-
-                </select>
-
-
-                <!-- ==========================================
-                     DATOS DE TRANSFERENCIA
-                =========================================== -->
-
-                <div
-                    id="datos-transferencia"
-                    class="datos-pago">
-
-                    <h3>
-                        🏦 Datos de transferencia
-                    </h3>
-
-                    <p class="nota">
-                        Esta sección es solamente una
-                        simulación de pago.
-                    </p>
-
-
-                    <label for="banco-transferencia">
-                        Banco desde el que realizas la transferencia
-                    </label>
-
-                    <input
-                        type="text"
-                        id="banco-transferencia"
-                        placeholder="Ej. BBVA">
-
-
-                    <label for="referencia-transferencia">
-                        Número de referencia
-                    </label>
-
-                    <input
-                        type="text"
-                        id="referencia-transferencia"
-                        placeholder="Ej. REF123456789"
-                        maxlength="30">
-
-
-                    <label for="monto-transferencia">
-                        Monto transferido
-                    </label>
-
-                    <input
-                        type="number"
-                        id="monto-transferencia"
-                        placeholder="Escribe el monto"
-                        min="1"
-                        step="0.01">
-
-                </div>
-
-
-                <!-- ==========================================
-                     DATOS DE TARJETA
-                =========================================== -->
-
-                <div
-                    id="datos-tarjeta"
-                    class="datos-pago">
-
-                    <h3>
-                        💳 Datos de la tarjeta
-                    </h3>
-
-                    <p class="nota">
-                        Esta sección es solamente una
-                        simulación de pago.
-                    </p>
-
-
-                    <label for="titular">
-                        Nombre del titular
-                    </label>
-
-                    <input
-                        type="text"
-                        id="titular"
-                        placeholder="Nombre que aparece en la tarjeta"
-                        autocomplete="cc-name">
-
-
-                    <label for="numero-tarjeta">
-                        Número de tarjeta
-                    </label>
-
-                    <input
-                        type="text"
-                        id="numero-tarjeta"
-                        placeholder="1234 5678 9012 3456"
-                        maxlength="19"
-                        inputmode="numeric"
-                        autocomplete="cc-number">
-
-
-                    <div class="tarjeta-fila">
-
-                        <div>
-
-                            <label for="vencimiento">
-                                Fecha de vencimiento
-                            </label>
-
-                            <input
-                                type="text"
-                                id="vencimiento"
-                                placeholder="MM/AA"
-                                maxlength="5"
-                                inputmode="numeric"
-                                autocomplete="cc-exp">
-
-                        </div>
-
-
-                        <div>
-
-                            <label for="cvv">
-                                CVV
-                            </label>
-
-                            <input
-                                type="password"
-                                id="cvv"
-                                placeholder="123"
-                                maxlength="4"
-                                inputmode="numeric"
-                                autocomplete="cc-csc">
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- RESUMEN -->
-
-                <div class="resumen">
-
-                    <p>
-                        Total del pedido:
-                    </p>
-
-                    <strong>
-                        $<span id="total-pago">0</span>
-                    </strong>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="confirmar">
-
-                    ✅ Confirmar pedido
-
-                </button>
-
-            </form>
-
-        </div>
-
-    </div>
-
-
-    <!-- ==========================================
-         VENTANA DE CONFIRMACIÓN
-    =========================================== -->
-
-    <div
-        id="ventana-confirmacion"
-        class="modal">
-
-        <div class="confirmacion">
-
-            <span
-                class="cerrar"
-                onclick="cerrarConfirmacion()">
-
-                ×
-
-            </span>
-
-
-            <div class="icono-confirmacion">
-                🌸
-            </div>
-
-
-            <h2>
-                ¡Pedido confirmado!
-            </h2>
-
-
-            <p class="mensaje-confirmacion">
-
-                Gracias por tu compra en
-                <strong>
-                    El Jardín de Snoopy
-                </strong>.
-
-            </p>
-
-
-            <!-- DATOS CLIENTE -->
-
-            <div class="detalle-pedido">
-
-                <h3>
-                    👤 Datos del cliente
-                </h3>
-
-                <p>
-                    <strong>Nombre:</strong>
-                    <span id="confirmacion-nombre"></span>
-                </p>
-
-                <p>
-                    <strong>Teléfono:</strong>
-                    <span id="confirmacion-telefono"></span>
-                </p>
-
-                <p>
-                    <strong>Dirección:</strong>
-                    <span id="confirmacion-direccion"></span>
-                </p>
-
-            </div>
-
-
-            <!-- PRODUCTOS -->
-
-            <div class="detalle-pedido">
-
-                <h3>
-                    🌷 Productos
-                </h3>
-
-                <div id="confirmacion-productos"></div>
-
-            </div>
-
-
-            <!-- PAGO -->
-
-            <div class="detalle-pedido">
-
-                <h3>
-                    💳 Información del pago
-                </h3>
-
-                <p>
-                    <strong>
-                        Forma de pago:
-                    </strong>
-
-                    <span id="confirmacion-pago"></span>
-                </p>
-
-                <div
-                    id="confirmacion-datos-pago">
-                </div>
-
-            </div>
-
-
-            <!-- TOTAL -->
-
-            <div class="total-confirmacion">
-
-                <span>
-                    Total:
-                </span>
-
-                <strong>
-                    $<span id="confirmacion-total">
-                        0
-                    </span>
-                </strong>
-
-            </div>
-
-
-            <button
-                type="button"
-                class="boton-finalizar"
-                onclick="cerrarConfirmacion()">
-
-                🌷 Aceptar
-
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- ==========================================
-         FOOTER
-    =========================================== -->
-
     <footer>
-
-        <p>
-            🌷 El Jardín de Snoopy © 2026
-        </p>
-
+        <a class="marca marca-footer" href="#inicio">🌷 El Jardín de Snoopy</a>
+        <p>Detalles que florecen con amor.</p>
+        <p class="copyright">© 2026 El Jardín de Snoopy · Hecho con ♡</p>
     </footer>
 
+    <!-- FORMULARIO DEL PEDIDO -->
+    <div id="ventana-pago" class="modal" aria-hidden="true">
+        <section class="dialogo formulario" role="dialog" aria-modal="true" aria-labelledby="titulo-pedido">
+            <button type="button" class="cerrar" id="cerrar-formulario" aria-label="Cerrar formulario">×</button>
+            <span class="etiqueta">UN PASITO MÁS</span>
+            <h2 id="titulo-pedido">Datos de tu pedido 🌸</h2>
+            <p class="texto-modal">Completa tus datos para preparar el resumen de tu compra.</p>
 
-    <script src="script.js"></script>
+            <form id="formulario-pedido">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" autocomplete="name" required maxlength="100" placeholder="Tu nombre">
+
+                <label for="telefono">Teléfono</label>
+                <input type="tel" id="telefono" autocomplete="tel" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" required placeholder="10 dígitos">
+
+                <label for="direccion">Dirección de entrega</label>
+                <textarea id="direccion" autocomplete="street-address" required maxlength="300" placeholder="Calle, número, colonia…"></textarea>
+
+                <label for="pago">Forma de pago</label>
+                <select id="pago" required>
+                    <option value="">Selecciona una opción</option>
+                    <option value="Efectivo">💵 Efectivo</option>
+                    <option value="Transferencia">🏦 Transferencia (demostración)</option>
+                    <option value="Pago al entregar">🚚 Pago al entregar</option>
+                    <option value="Tarjeta">💳 Tarjeta (demostración)</option>
+                </select>
+
+                <div id="datos-transferencia" class="datos-pago" hidden>
+                    <h3>🏦 Datos de demostración</h3>
+                    <p class="nota-pago">No hagas una transferencia real. Estos datos solo sirven para probar el formulario.</p>
+                    <label for="banco-transferencia">Banco</label>
+                    <input type="text" id="banco-transferencia" maxlength="80" placeholder="Nombre del banco">
+                    <label for="referencia-transferencia">Referencia ficticia</label>
+                    <input type="text" id="referencia-transferencia" maxlength="30" placeholder="Referencia de prueba">
+                    <label for="monto-transferencia">Monto declarado</label>
+                    <input type="number" id="monto-transferencia" min="0.01" step="0.01" placeholder="0.00">
+                </div>
+
+                <div id="datos-tarjeta" class="datos-pago" hidden>
+                    <h3>💳 Tarjeta de prueba</h3>
+                    <p class="nota-pago">No ingreses datos de una tarjeta real. No se realizará ningún cargo.</p>
+                    <label for="titular">Titular ficticio</label>
+                    <input type="text" id="titular" maxlength="100" autocomplete="off" placeholder="Nombre de prueba">
+                    <label for="numero-tarjeta">Número ficticio</label>
+                    <input type="text" id="numero-tarjeta" inputmode="numeric" maxlength="19" autocomplete="off" placeholder="1234 5678 9012 3456">
+                    <div class="tarjeta-fila">
+                        <div>
+                            <label for="vencimiento">Vencimiento</label>
+                            <input type="text" id="vencimiento" maxlength="5" autocomplete="off" placeholder="MM/AA">
+                        </div>
+                        <div>
+                            <label for="cvv">CVV ficticio</label>
+                            <input type="password" id="cvv" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="123">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resumen">
+                    <span>Total de tu pedido</span>
+                    <strong id="total-pago">$0.00</strong>
+                </div>
+
+                <button type="submit" class="boton boton-principal boton-ancho">Preparar confirmación ♡</button>
+                <p class="aviso-seguridad">Esta página es una demostración. No procesa pagos ni envía pedidos a una tienda.</p>
+            </form>
+        </section>
+    </div>
+
+    <!-- CONFIRMACIÓN -->
+    <div id="ventana-confirmacion" class="modal" aria-hidden="true">
+        <section class="dialogo confirmacion" role="dialog" aria-modal="true" aria-labelledby="titulo-confirmacion">
+            <button type="button" class="cerrar" id="cerrar-confirmacion" aria-label="Cerrar confirmación">×</button>
+            <div class="icono-confirmacion">🌷</div>
+            <span class="etiqueta">RESUMEN DE DEMOSTRACIÓN</span>
+            <h2 id="titulo-confirmacion">¡Gracias por elegirnos!</h2>
+            <p class="texto-modal">Tu pedido de demostración quedó preparado. No se ha enviado ni cobrado.</p>
+
+            <div class="detalle-pedido">
+                <h3>👤 Datos del cliente</h3>
+                <p><strong>Nombre:</strong> <span id="confirmacion-nombre"></span></p>
+                <p><strong>Teléfono:</strong> <span id="confirmacion-telefono"></span></p>
+                <p><strong>Dirección:</strong> <span id="confirmacion-direccion"></span></p>
+            </div>
+
+            <div class="detalle-pedido">
+                <h3>💐 Tus flores</h3>
+                <div id="confirmacion-productos"></div>
+            </div>
+
+            <div class="detalle-pedido">
+                <h3>💳 Forma de pago</h3>
+                <p id="confirmacion-pago"></p>
+                <div id="confirmacion-datos-pago"></div>
+            </div>
+
+            <div class="total-confirmacion">
+                <span>Total</span>
+                <strong id="confirmacion-total">$0.00</strong>
+            </div>
+
+            <button type="button" id="boton-finalizar" class="boton boton-principal boton-ancho">Volver a la tienda 🌸</button>
+        </section>
+    </div>
 
 </body>
-
 </html>
-```
-
