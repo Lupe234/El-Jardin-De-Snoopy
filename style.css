@@ -1,3 +1,4 @@
+
 /* ==========================================
    EL JARDÍN DE SNOOPY
    ESTILOS GENERALES
@@ -15,13 +16,16 @@ html {
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     background: #fcf8f2;
     color: #333;
     line-height: 1.5;
 }
 
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
     font: inherit;
 }
 
@@ -35,12 +39,17 @@ button {
     transition: background .2s, transform .1s;
 }
 
-button:hover {
+button:hover:not(:disabled) {
     background: #941d30;
 }
 
-button:active {
+button:active:not(:disabled) {
     transform: scale(.98);
+}
+
+button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
 }
 
 button:focus-visible,
@@ -56,7 +65,9 @@ a {
     color: inherit;
 }
 
-/* ENCABEZADO */
+/* ==========================================
+   ENCABEZADO
+========================================== */
 
 header {
     background: linear-gradient(135deg, #b8263a, #d64b68);
@@ -80,7 +91,9 @@ header .frase {
     opacity: .9;
 }
 
-/* NAVEGACIÓN */
+/* ==========================================
+   NAVEGACIÓN
+========================================== */
 
 .navegacion {
     display: flex;
@@ -98,13 +111,16 @@ header .frase {
     color: #a62237;
     padding: 8px 12px;
     border-radius: 8px;
+    transition: background .2s;
 }
 
 .navegacion a:hover {
     background: #fff0f3;
 }
 
-/* ESTRUCTURA */
+/* ==========================================
+   ESTRUCTURA
+========================================== */
 
 main {
     width: 92%;
@@ -114,6 +130,7 @@ main {
 
 .seccion {
     margin-bottom: 45px;
+    scroll-margin-top: 20px;
 }
 
 h2 {
@@ -135,16 +152,20 @@ h2 {
     padding: 25px;
 }
 
-/* CATÁLOGO */
+/* ==========================================
+   CATÁLOGO DE PRODUCTOS
+========================================== */
 
 .contenedor-productos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 25px;
 }
 
 .producto {
     min-width: 0;
+    display: flex;
+    flex-direction: column;
     background: white;
     border-radius: 15px;
     padding: 15px;
@@ -162,14 +183,15 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 180px;
+    min-height: 160px;
     background: #fff0f3;
     border-radius: 12px;
-    font-size: 85px;
+    font-size: 76px;
 }
 
 .producto h3 {
     margin: 15px 0 8px;
+    font-size: 18px;
     overflow-wrap: anywhere;
 }
 
@@ -178,18 +200,23 @@ h2 {
     margin-bottom: 12px;
 }
 
-.precio {
+.producto .precio {
     color: #b8263a;
     font-size: 21px;
     font-weight: bold;
+    margin-top: auto;
+    padding-top: 12px;
     margin-bottom: 15px;
 }
 
 .producto button {
     width: 100%;
+    margin-top: auto;
 }
 
-/* CARRITO */
+/* ==========================================
+   CARRITO
+========================================== */
 
 .carrito {
     background: white;
@@ -221,6 +248,11 @@ h2 {
     overflow-wrap: anywhere;
 }
 
+.item-carrito > div:last-child {
+    text-align: right;
+    flex-shrink: 0;
+}
+
 .item-carrito p {
     color: #666;
     margin-top: 5px;
@@ -228,16 +260,17 @@ h2 {
 
 .controles-cantidad {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
     margin-top: 10px;
 }
 
 .btn-cantidad {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     padding: 0;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
@@ -256,7 +289,7 @@ h2 {
     font-size: 13px;
 }
 
-.eliminar:hover {
+.eliminar:hover:not(:disabled) {
     background: #555;
 }
 
@@ -270,6 +303,7 @@ h2 {
 .total h3 {
     font-size: 23px;
     color: #b8263a;
+    overflow-wrap: anywhere;
 }
 
 .comprar {
@@ -278,7 +312,9 @@ h2 {
     font-size: 17px;
 }
 
-/* VENTANAS EMERGENTES */
+/* ==========================================
+   VENTANAS MODALES
+========================================== */
 
 .modal {
     display: none;
@@ -289,6 +325,7 @@ h2 {
     justify-content: center;
     align-items: center;
     padding: 20px;
+    overflow-x: hidden;
     overflow-y: auto;
 }
 
@@ -303,6 +340,7 @@ h2 {
     width: 100%;
     max-width: 550px;
     max-height: 92vh;
+    overflow-x: hidden;
     overflow-y: auto;
     padding: 30px;
     border-radius: 16px;
@@ -326,12 +364,14 @@ h2 {
     line-height: 1.2;
 }
 
-.cerrar:hover {
+.cerrar:hover:not(:disabled) {
     background: transparent;
     color: #b8263a;
 }
 
-/* FORMULARIO */
+/* ==========================================
+   FORMULARIO DE PEDIDO
+========================================== */
 
 #formulario-pedido {
     display: flex;
@@ -339,6 +379,7 @@ h2 {
 }
 
 #formulario-pedido label {
+    display: block;
     margin-top: 13px;
     margin-bottom: 6px;
     font-weight: bold;
@@ -349,12 +390,19 @@ h2 {
 #formulario-pedido select {
     display: block;
     width: 100%;
+    min-width: 0;
     padding: 12px;
     border: 1px solid #e2b5bd;
     border-radius: 8px;
     background: #fffdfd;
     color: #333;
     font-size: 16px;
+}
+
+#formulario-pedido input:focus,
+#formulario-pedido textarea:focus,
+#formulario-pedido select:focus {
+    border-color: #b8263a;
 }
 
 #formulario-pedido textarea {
@@ -371,7 +419,7 @@ h2 {
 }
 
 .datos-pago[hidden] {
-    display: none;
+    display: none !important;
 }
 
 .datos-pago h3 {
@@ -388,6 +436,7 @@ h2 {
     font-size: 13px;
     color: #666;
     text-align: center;
+    overflow-wrap: anywhere;
 }
 
 .tarjeta-fila {
@@ -414,6 +463,7 @@ h2 {
 .resumen strong {
     color: #b8263a;
     font-size: 21px;
+    overflow-wrap: anywhere;
 }
 
 .confirmar {
@@ -421,7 +471,9 @@ h2 {
     margin-top: 20px;
 }
 
-/* CONFIRMACIÓN */
+/* ==========================================
+   CONFIRMACIÓN DEL PEDIDO
+========================================== */
 
 .icono-confirmacion {
     text-align: center;
@@ -465,6 +517,7 @@ h2 {
     color: white;
     border-radius: 10px;
     font-size: 21px;
+    overflow-wrap: anywhere;
 }
 
 .total-confirmacion strong {
@@ -476,7 +529,9 @@ h2 {
     margin-top: 20px;
 }
 
-/* ANIMACIONES */
+/* ==========================================
+   ANIMACIONES
+========================================== */
 
 @keyframes aparecer {
     from {
@@ -490,7 +545,9 @@ h2 {
     }
 }
 
-/* PIE DE PÁGINA */
+/* ==========================================
+   PIE DE PÁGINA
+========================================== */
 
 footer {
     margin-top: 50px;
@@ -506,20 +563,32 @@ footer p + p {
     opacity: .9;
 }
 
-/* TABLETAS */
+/* ==========================================
+   TABLETAS
+========================================== */
 
-@media (max-width: 850px) {
+@media (max-width: 1000px) {
+    .contenedor-productos {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+    }
+}
+
+@media (max-width: 750px) {
     .contenedor-productos {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 16px;
     }
 
     .producto-emoji {
-        height: 160px;
+        min-height: 145px;
+        font-size: 65px;
     }
 }
 
-/* CELULARES */
+/* ==========================================
+   CELULARES
+========================================== */
 
 @media (max-width: 600px) {
     header {
@@ -557,15 +626,19 @@ footer p + p {
     }
 
     .producto-emoji {
-        height: 125px;
-        font-size: 60px;
+        min-height: 115px;
+        font-size: 52px;
     }
 
     .producto h3 {
         font-size: 15px;
     }
 
-    .precio {
+    .producto p:not(.precio) {
+        font-size: 13px;
+    }
+
+    .producto .precio {
         font-size: 18px;
     }
 
@@ -581,11 +654,12 @@ footer p + p {
     .item-carrito {
         gap: 8px;
         align-items: flex-start;
+        flex-wrap: wrap;
     }
 
     .item-carrito > div:last-child {
-        text-align: right;
-        flex-shrink: 0;
+        text-align: left;
+        flex-shrink: 1;
     }
 
     .formulario,
@@ -599,6 +673,10 @@ footer p + p {
         gap: 0;
     }
 
+    .resumen strong {
+        font-size: 17px;
+    }
+
     .total-confirmacion {
         font-size: 18px;
     }
@@ -608,16 +686,29 @@ footer p + p {
     }
 }
 
+/* CELULARES PEQUEÑOS */
+
 @media (max-width: 360px) {
     .contenedor-productos {
         grid-template-columns: 1fr;
     }
 
     .producto-emoji {
-        height: 180px;
-        font-size: 75px;
+        min-height: 170px;
+        font-size: 72px;
+    }
+
+    .formulario,
+    .confirmacion {
+        padding: 24px 12px;
+    }
+
+    .carrito {
+        padding: 18px 12px;
     }
 }
+
+/* REDUCIR MOVIMIENTO */
 
 @media (prefers-reduced-motion: reduce) {
     *,
@@ -625,6 +716,7 @@ footer p + p {
     *::after {
         scroll-behavior: auto !important;
         animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;
     }
 }
