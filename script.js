@@ -5,7 +5,9 @@
 
 "use strict";
 
-/* CATÁLOGO */
+/* ==========================================
+   1. CATÁLOGO DE 16 PRODUCTOS
+========================================== */
 
 const productos = [
     {
@@ -49,70 +51,204 @@ const productos = [
         precio: 450,
         emoji: "💐",
         descripcion: "Una combinación de flores para sorprender."
+    },
+    {
+        id: 7,
+        nombre: "Ramo de orquídeas",
+        precio: 520,
+        emoji: "🪻",
+        descripcion: "Un regalo sofisticado y elegante."
+    },
+    {
+        id: 8,
+        nombre: "Ramo de claveles",
+        precio: 300,
+        emoji: "💐",
+        descripcion: "Flores llenas de cariño y tradición."
+    },
+    {
+        id: 9,
+        nombre: "Ramo de peonías",
+        precio: 580,
+        emoji: "🌸",
+        descripcion: "Flores delicadas para ocasiones especiales."
+    },
+    {
+        id: 10,
+        nombre: "Ramo de lavanda",
+        precio: 320,
+        emoji: "💜",
+        descripcion: "Un detalle aromático y relajante."
+    },
+    {
+        id: 11,
+        nombre: "Ramo de flores blancas",
+        precio: 420,
+        emoji: "🤍",
+        descripcion: "Pureza y elegancia en cada flor."
+    },
+    {
+        id: 12,
+        nombre: "Ramo de flores rosas",
+        precio: 390,
+        emoji: "🩷",
+        descripcion: "Un detalle dulce y romántico."
+    },
+    {
+        id: 13,
+        nombre: "Caja de rosas",
+        precio: 650,
+        emoji: "🌹",
+        descripcion: "Rosas presentadas en una caja elegante."
+    },
+    {
+        id: 14,
+        nombre: "Canasta floral",
+        precio: 550,
+        emoji: "🧺",
+        descripcion: "Una hermosa combinación de flores."
+    },
+    {
+        id: 15,
+        nombre: "Ramo de gerberas",
+        precio: 340,
+        emoji: "🌺",
+        descripcion: "Flores coloridas para alegrar el día."
+    },
+    {
+        id: 16,
+        nombre: "Ramo premium",
+        precio: 750,
+        emoji: "💐",
+        descripcion: "Una selección floral para sorprender."
     }
 ];
 
+/* ==========================================
+   2. ESTADO DEL CARRITO
+========================================== */
+
 let carrito = [];
 
-/* UTILIDADES */
+/* ==========================================
+   3. UTILIDADES
+========================================== */
 
-const obtenerElemento = id => document.getElementById(id);
+const obtenerElemento = id =>
+    document.getElementById(id);
 
 const formatoMoneda = cantidad =>
-    "$" + cantidad.toLocaleString("es-MX", {
+    new Intl.NumberFormat("es-MX", {
+        style: "currency",
+        currency: "MXN",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
-    });
+    }).format(cantidad);
 
-/* CATÁLOGO */
+/* REGISTRAR EVENTOS DE FORMA SEGURA */
+
+function agregarEvento(id, evento, funcion) {
+    const elemento = obtenerElemento(id);
+
+    if (elemento) {
+        elemento.addEventListener(evento, funcion);
+    }
+}
+
+/* OBTENER VALORES SIN PROVOCAR ERRORES */
+
+function obtenerValor(id) {
+    const elemento = obtenerElemento(id);
+
+    return elemento && "value" in elemento
+        ? elemento.value.trim()
+        : "";
+}
+/* ==========================================
+   4. MOSTRAR PRODUCTOS EN EL CATÁLOGO
+========================================== */
 
 function mostrarProductos() {
     const contenedor = obtenerElemento("contenedor-productos");
+
+    // Evitar errores si el contenedor no existe
     if (!contenedor) return;
 
+    // Limpiar el catálogo antes de volver a generarlo
     contenedor.replaceChildren();
 
     productos.forEach(producto => {
+
+        // Crear tarjeta del producto
         const tarjeta = document.createElement("article");
         tarjeta.className = "producto";
 
+        // Emoji de las flores
         const emoji = document.createElement("div");
         emoji.className = "producto-emoji";
         emoji.setAttribute("aria-hidden", "true");
         emoji.textContent = producto.emoji;
 
+        // Nombre
         const nombre = document.createElement("h3");
         nombre.textContent = producto.nombre;
 
+        // Descripción
         const descripcion = document.createElement("p");
         descripcion.textContent = producto.descripcion;
 
+        // Precio
         const precio = document.createElement("p");
         precio.className = "precio";
         precio.textContent = formatoMoneda(producto.precio);
 
+        // Botón para agregar al carrito
         const boton = document.createElement("button");
         boton.type = "button";
         boton.className = "boton-agregar";
         boton.textContent = "🛒 Agregar al carrito";
-        boton.addEventListener("click", () => agregar(producto.id));
 
-        tarjeta.append(emoji, nombre, descripcion, precio, boton);
+        boton.addEventListener("click", () => {
+            agregar(producto.id);
+        });
+
+        // Agregar los elementos a la tarjeta
+        tarjeta.append(
+            emoji,
+            nombre,
+            descripcion,
+            precio,
+            boton
+        );
+
+        // Agregar tarjeta al catálogo
         contenedor.appendChild(tarjeta);
     });
 }
 
-/* AGREGAR PRODUCTOS */
+/* ==========================================
+   5. AGREGAR PRODUCTOS AL CARRITO
+========================================== */
 
 function agregar(id) {
+
+    // Buscar el producto en el catálogo
     const producto = productos.find(item => item.id === id);
+
+    // Protección por si el producto no existe
     if (!producto) return;
 
+    // Comprobar si ya está en el carrito
     const existente = carrito.find(item => item.id === id);
 
     if (existente) {
+
+        // Aumentar la cantidad si ya existe
         existente.cantidad++;
+
     } else {
+
+        // Agregarlo por primera vez
         carrito.push({
             id: producto.id,
             nombre: producto.nombre,
@@ -121,29 +257,42 @@ function agregar(id) {
         });
     }
 
+    // Actualizar el carrito visualmente
     actualizarCarrito();
 }
-
-/* ACTUALIZAR CARRITO */
+/* ==========================================
+   6. ACTUALIZAR EL CARRITO
+========================================== */
 
 function actualizarCarrito() {
     const lista = obtenerElemento("lista-carrito");
     const totalElemento = obtenerElemento("total");
     const botonComprar = obtenerElemento("boton-comprar");
 
-    if (!lista || !totalElemento) return;
+    // Evitar errores si faltan elementos HTML
+    if (!lista || !totalElemento) {
+        if (botonComprar) {
+            botonComprar.disabled = true;
+        }
+        return;
+    }
 
+    // Limpiar el contenido anterior
     lista.replaceChildren();
 
+    // Mostrar mensaje cuando el carrito está vacío
     if (carrito.length === 0) {
         const mensaje = document.createElement("p");
         mensaje.textContent = "Tu carrito está vacío.";
         lista.appendChild(mensaje);
     }
 
+    // Recorrer los productos del carrito
     carrito.forEach(producto => {
         const item = document.createElement("div");
         item.className = "item-carrito";
+
+        /* INFORMACIÓN DEL PRODUCTO */
 
         const informacion = document.createElement("div");
 
@@ -154,155 +303,288 @@ function actualizarCarrito() {
         detalle.textContent =
             `${formatoMoneda(producto.precio)} × ${producto.cantidad}`;
 
+        /* CONTROLES DE CANTIDAD */
+
         const controles = document.createElement("div");
         controles.className = "controles-cantidad";
 
+        // Botón disminuir
         const disminuir = document.createElement("button");
         disminuir.type = "button";
         disminuir.className = "btn-cantidad";
         disminuir.textContent = "−";
-        disminuir.setAttribute("aria-label", `Disminuir ${producto.nombre}`);
-        disminuir.addEventListener("click", () => cambiarCantidad(producto.id, -1));
+        disminuir.setAttribute(
+            "aria-label",
+            `Disminuir ${producto.nombre}`
+        );
 
+        disminuir.addEventListener("click", () => {
+            cambiarCantidad(producto.id, -1);
+        });
+
+        // Cantidad actual
         const cantidad = document.createElement("span");
         cantidad.className = "cantidad";
         cantidad.textContent = producto.cantidad;
-        cantidad.setAttribute("aria-label", "Cantidad");
 
+        // Botón aumentar
         const aumentar = document.createElement("button");
         aumentar.type = "button";
         aumentar.className = "btn-cantidad";
         aumentar.textContent = "+";
-        aumentar.setAttribute("aria-label", `Aumentar ${producto.nombre}`);
-        aumentar.addEventListener("click", () => cambiarCantidad(producto.id, 1));
+        aumentar.setAttribute(
+            "aria-label",
+            `Aumentar ${producto.nombre}`
+        );
+
+        aumentar.addEventListener("click", () => {
+            cambiarCantidad(producto.id, 1);
+        });
 
         controles.append(disminuir, cantidad, aumentar);
         informacion.append(nombre, detalle, controles);
 
+        /* SUBTOTAL Y ELIMINACIÓN */
+
         const acciones = document.createElement("div");
 
         const subtotal = document.createElement("strong");
-        subtotal.textContent = formatoMoneda(producto.precio * producto.cantidad);
+        subtotal.textContent = formatoMoneda(
+            producto.precio * producto.cantidad
+        );
 
         const eliminar = document.createElement("button");
         eliminar.type = "button";
         eliminar.className = "eliminar";
         eliminar.textContent = "🗑️ Eliminar";
-        eliminar.addEventListener("click", () => eliminarProducto(producto.id));
 
-        acciones.append(subtotal, document.createElement("br"), eliminar);
+        eliminar.addEventListener("click", () => {
+            eliminarProducto(producto.id);
+        });
+
+        acciones.append(subtotal, eliminar);
+
+        // Agregar producto al listado
         item.append(informacion, acciones);
         lista.appendChild(item);
     });
 
+    // Actualizar el total general
     totalElemento.textContent = formatoMoneda(obtenerTotal());
 
+    // Desactivar comprar si no hay productos
     if (botonComprar) {
         botonComprar.disabled = carrito.length === 0;
     }
 }
 
-/* CANTIDADES Y ELIMINACIÓN */
+/* ==========================================
+   7. AUMENTAR Y DISMINUIR CANTIDADES
+========================================== */
 
 function cambiarCantidad(id, cambio) {
     const producto = carrito.find(item => item.id === id);
+
     if (!producto) return;
 
     producto.cantidad += cambio;
 
+    // Eliminar el producto si llega a cero
     if (producto.cantidad <= 0) {
-        carrito = carrito.filter(item => item.id !== id);
+        eliminarProducto(id);
+        return;
     }
 
     actualizarCarrito();
 }
 
+/* ==========================================
+   8. ELIMINAR PRODUCTOS DEL CARRITO
+========================================== */
+
 function eliminarProducto(id) {
     carrito = carrito.filter(item => item.id !== id);
+
     actualizarCarrito();
 }
 
-/* TOTAL */
+/* ==========================================
+   9. CALCULAR TOTAL DE LA COMPRA
+========================================== */
 
 function obtenerTotal() {
     return carrito.reduce(
-        (total, producto) => total + producto.precio * producto.cantidad,
+        (total, producto) =>
+            total + producto.precio * producto.cantidad,
         0
     );
 }
-
-/* VENTANAS EMERGENTES */
+/* ==========================================
+   10. ABRIR VENTANAS MODALES
+========================================== */
 
 function abrirModal(id) {
     const modal = obtenerElemento(id);
+
+    // Comprobar que el modal exista
     if (!modal) return;
 
+    // Mostrar la ventana
     modal.classList.add("visible");
     modal.setAttribute("aria-hidden", "false");
+
+    // Bloquear desplazamiento de la página
     document.body.style.overflow = "hidden";
 
+    // Buscar el primer campo o botón disponible
     const dialogo = modal.querySelector('[role="dialog"]');
+
     const primerCampo = dialogo?.querySelector(
-        'input:not([type="hidden"]):not([disabled]), textarea, select, button'
+        'input:not([type="hidden"]):not([disabled]), ' +
+        'textarea:not([disabled]), ' +
+        'select:not([disabled]), ' +
+        'button:not([disabled])'
     );
 
-    primerCampo?.focus();
+    // Colocar el foco en el primer campo
+    if (primerCampo) {
+        primerCampo.focus();
+    }
 }
+
+/* ==========================================
+   11. CERRAR VENTANAS MODALES
+========================================== */
 
 function cerrarModal(id) {
     const modal = obtenerElemento(id);
+
+    // Comprobar que el modal exista
     if (!modal) return;
 
+    // Ocultar la ventana
     modal.classList.remove("visible");
     modal.setAttribute("aria-hidden", "true");
 
-    const otroAbierto = document.querySelector('.modal.visible');
-    document.body.style.overflow = otroAbierto ? "hidden" : "";
+    // Comprobar si hay otra ventana abierta
+    const otroAbierto = document.querySelector(".modal.visible");
 
+    // Restaurar el desplazamiento si no hay otra abierta
+    document.body.style.overflow =
+        otroAbierto ? "hidden" : "";
+
+    // Devolver el foco al botón de compra
     if (id === "ventana-pago") {
         obtenerElemento("boton-comprar")?.focus();
     }
 
+    // Quitar el foco del botón de finalizar
     if (id === "ventana-confirmacion") {
         obtenerElemento("boton-finalizar")?.blur();
     }
 }
 
-/* ABRIR PEDIDO */
+/* ==========================================
+   12. ABRIR EL FORMULARIO DE PEDIDO
+========================================== */
 
 function realizarPedido() {
+    // No permitir pedidos con el carrito vacío
     if (carrito.length === 0) {
         alert("🛒 Tu carrito está vacío.");
         return;
     }
 
-    obtenerElemento("total-pago").textContent = formatoMoneda(obtenerTotal());
+    // Mostrar el total dentro del formulario
+    const totalPago = obtenerElemento("total-pago");
+
+    if (totalPago) {
+        totalPago.textContent = formatoMoneda(obtenerTotal());
+    }
+
+    // Abrir la ventana del formulario
     abrirModal("ventana-pago");
 }
 
-/* CAMPOS DE PAGO */
+/* ==========================================
+   13. CERRAR AL HACER CLIC FUERA
+========================================== */
+
+function configurarCierreExterior(id) {
+    const modal = obtenerElemento(id);
+
+    // Evitar errores si no existe
+    if (!modal) return;
+
+    modal.addEventListener("click", evento => {
+        // Cerrar solamente si se pulsa el fondo
+        if (evento.target === modal) {
+            cerrarModal(id);
+        }
+    });
+}
+
+/* ==========================================
+   14. CERRAR CON LA TECLA ESCAPE
+========================================== */
+
+function configurarEscape() {
+    document.addEventListener("keydown", evento => {
+        if (evento.key !== "Escape") return;
+
+        const confirmacion =
+            obtenerElemento("ventana-confirmacion");
+
+        const pago =
+            obtenerElemento("ventana-pago");
+
+        // Cerrar primero la confirmación si está abierta
+        if (confirmacion?.classList.contains("visible")) {
+            cerrarModal("ventana-confirmacion");
+        } else if (pago?.classList.contains("visible")) {
+            cerrarModal("ventana-pago");
+        }
+    });
+}
+/* ==========================================
+   15. CONFIGURAR CAMPOS DE PAGO
+========================================== */
 
 function configurarCamposPago(contenedorId, ids, visible) {
     const contenedor = obtenerElemento(contenedorId);
-    if (!contenedor) return;
 
-    contenedor.hidden = !visible;
+    // Mostrar u ocultar el grupo de campos
+    if (contenedor) {
+        contenedor.hidden = !visible;
+    }
 
+    // Configurar los campos obligatorios
     ids.forEach(id => {
         const campo = obtenerElemento(id);
+
         if (!campo) return;
 
         campo.required = visible;
 
+        // Limpiar errores de validación al ocultar
         if (!visible) {
             campo.setCustomValidity("");
         }
     });
 }
 
-function mostrarDatosPago() {
-    const metodo = obtenerElemento("pago").value;
+/* ==========================================
+   16. MOSTRAR DATOS SEGÚN EL MÉTODO DE PAGO
+========================================== */
 
+function mostrarDatosPago() {
+    const campoPago = obtenerElemento("pago");
+
+    if (!campoPago) return;
+
+    const metodo = campoPago.value;
+
+    // Campos para transferencia
     configurarCamposPago(
         "datos-transferencia",
         [
@@ -313,140 +595,281 @@ function mostrarDatosPago() {
         metodo === "Transferencia"
     );
 
+    // Campos para tarjeta ficticia
     configurarCamposPago(
         "datos-tarjeta",
-        ["titular", "numero-tarjeta", "vencimiento", "cvv"],
+        [
+            "titular",
+            "numero-tarjeta",
+            "vencimiento",
+            "cvv"
+        ],
         metodo === "Tarjeta"
     );
 }
 
-/* FORMATEAR DATOS FICTICIOS */
+/* ==========================================
+   17. FORMATEAR EL NÚMERO DE TARJETA
+========================================== */
 
-obtenerElemento("numero-tarjeta").addEventListener("input", function () {
-    const numero = this.value.replace(/\D/g, "").slice(0, 16);
+agregarEvento("numero-tarjeta", "input", function () {
+    const numero = this.value
+        .replace(/\D/g, "")
+        .slice(0, 16);
+
     this.value = numero.replace(/(\d{4})(?=\d)/g, "$1 ");
 });
 
-obtenerElemento("vencimiento").addEventListener("input", function () {
-    const digitos = this.value.replace(/\D/g, "").slice(0, 4);
+/* ==========================================
+   18. FORMATEAR FECHA DE VENCIMIENTO
+========================================== */
+
+agregarEvento("vencimiento", "input", function () {
+    const digitos = this.value
+        .replace(/\D/g, "")
+        .slice(0, 4);
+
     this.value = digitos.length > 2
         ? digitos.slice(0, 2) + "/" + digitos.slice(2)
         : digitos;
 });
 
-obtenerElemento("cvv").addEventListener("input", function () {
-    this.value = this.value.replace(/\D/g, "").slice(0, 4);
+/* ==========================================
+   19. FORMATEAR CVV
+========================================== */
+
+agregarEvento("cvv", "input", function () {
+    this.value = this.value
+        .replace(/\D/g, "")
+        .slice(0, 4);
 });
 
-obtenerElemento("telefono").addEventListener("input", function () {
-    this.value = this.value.replace(/\D/g, "").slice(0, 10);
-});
+/* ==========================================
+   20. FORMATEAR TELÉFONO
+========================================== */
 
-/* VALIDAR TRANSFERENCIA DE DEMOSTRACIÓN */
+agregarEvento("telefono", "input", function () {
+    this.value = this.value
+        .replace(/\D/g, "")
+        .slice(0, 10);
+});
+}/* ==========================================
+   21. VALIDAR DATOS DEL CLIENTE
+========================================== */
+
+function validarCamposPrincipales() {
+    const nombre = obtenerValor("nombre");
+    const telefono = obtenerValor("telefono");
+    const direccion = obtenerValor("direccion");
+    const pago = obtenerValor("pago");
+
+    if (!nombre) {
+        alert("⚠️ Escribe tu nombre completo.");
+        return false;
+    }
+
+    if (!/^\d{10}$/.test(telefono)) {
+        alert("⚠️ El teléfono debe contener exactamente 10 dígitos.");
+        return false;
+    }
+
+    if (!direccion) {
+        alert("⚠️ Escribe la dirección de entrega.");
+        return false;
+    }
+
+    if (!pago) {
+        alert("⚠️ Selecciona un método de pago.");
+        return false;
+    }
+
+    return true;
+}
+
+/* ==========================================
+   22. VALIDAR TRANSFERENCIA DE DEMOSTRACIÓN
+========================================== */
 
 function validarTransferencia() {
-    const banco = obtenerElemento("banco-transferencia").value.trim();
-    const referencia = obtenerElemento("referencia-transferencia").value.trim();
-    const montoTexto = obtenerElemento("monto-transferencia").value;
+    const banco = obtenerValor("banco-transferencia");
+    const referencia = obtenerValor("referencia-transferencia");
+    const montoTexto = obtenerValor("monto-transferencia");
     const monto = Number(montoTexto);
     const total = obtenerTotal();
 
-    if (!banco || !referencia || !montoTexto ||
-        !Number.isFinite(monto) || monto <= 0) {
+    // Comprobar que los datos estén completos
+    if (
+        !banco ||
+        !referencia ||
+        !montoTexto ||
+        !Number.isFinite(monto) ||
+        monto <= 0
+    ) {
         alert("⚠️ Completa todos los datos de la transferencia.");
         return false;
     }
 
+    // Comparar el monto con el total del carrito
     if (Math.abs(monto - total) > 0.009) {
-        alert(`⚠️ El monto debe coincidir con el total: ${formatoMoneda(total)}`);
+        alert(
+            "⚠️ El monto debe coincidir con el total: " +
+            formatoMoneda(total)
+        );
         return false;
     }
 
+    // La transferencia no se verifica realmente
     return true;
 }
 
-/* VALIDAR TARJETA FICTICIA */
+/* ==========================================
+   23. VALIDAR TARJETA FICTICIA
+========================================== */
 
 function validarTarjeta() {
-    const numero = obtenerElemento("numero-tarjeta").value.replace(/\D/g, "");
-    const vencimiento = obtenerElemento("vencimiento").value;
-    const cvv = obtenerElemento("cvv").value;
-    const titular = obtenerElemento("titular").value.trim();
+    const numero = obtenerValor("numero-tarjeta")
+        .replace(/\D/g, "");
 
-    if (!titular || numero.length !== 16 ||
+    const vencimiento = obtenerValor("vencimiento");
+    const cvv = obtenerValor("cvv");
+    const titular = obtenerValor("titular");
+
+    // Verificar los formatos de los datos
+    if (
+        !titular ||
+        numero.length !== 16 ||
         !/^(0[1-9]|1[0-2])\/\d{2}$/.test(vencimiento) ||
-        !/^\d{3,4}$/.test(cvv)) {
-        alert("⚠️ Revisa los datos ficticios de la tarjeta.");
+        !/^\d{3,4}$/.test(cvv)
+    ) {
+        alert(
+            "⚠️ Revisa los datos ficticios de la tarjeta."
+        );
         return false;
     }
 
-    const [mes, anioCorto] = vencimiento.split("/").map(Number);
+    // Comprobar que la fecha no haya vencido
+    const [mes, anioCorto] = vencimiento
+        .split("/")
+        .map(Number);
+
     const anio = 2000 + anioCorto;
     const ahora = new Date();
+
     const anioActual = ahora.getFullYear();
     const mesActual = ahora.getMonth() + 1;
 
-    if (anio < anioActual ||
-        (anio === anioActual && mes < mesActual)) {
-        alert("⚠️ La fecha ficticia de vencimiento ya pasó.");
+    if (
+        anio < anioActual ||
+        (anio === anioActual && mes < mesActual)
+    ) {
+        alert(
+            "⚠️ La fecha ficticia de vencimiento ya pasó."
+        );
         return false;
     }
 
     return true;
 }
 
-/* CONFIRMAR PEDIDO */
+/* ==========================================
+   24. VALIDAR FORMULARIO COMPLETO
+========================================== */
 
-function confirmarPedido(evento) {
-    evento.preventDefault();
-
-    if (carrito.length === 0) {
-        alert("🛒 Tu carrito está vacío.");
-        cerrarModal("ventana-pago");
-        return;
-    }
-
+function validarFormularioPedido() {
     const formulario = obtenerElemento("formulario-pedido");
 
-    if (!formulario.reportValidity()) return;
-
-    const nombre = obtenerElemento("nombre").value.trim();
-    const telefono = obtenerElemento("telefono").value.trim();
-    const direccion = obtenerElemento("direccion").value.trim();
-    const pago = obtenerElemento("pago").value;
-
-    if (!nombre || !direccion || !/^\d{10}$/.test(telefono)) {
-        alert("⚠️ Revisa tu nombre, teléfono y dirección.");
-        return;
+    // Comprobar que exista el formulario
+    if (!formulario) {
+        alert("⚠️ No se encontró el formulario del pedido.");
+        return false;
     }
 
-    if (pago === "Transferencia" && !validarTransferencia()) return;
-    if (pago === "Tarjeta" && !validarTarjeta()) return;
+    // Validar los campos HTML obligatorios
+    if (!formulario.reportValidity()) {
+        return false;
+    }
 
-    obtenerElemento("confirmacion-nombre").textContent = nombre;
-    obtenerElemento("confirmacion-telefono").textContent = telefono;
-    obtenerElemento("confirmacion-direccion").textContent = direccion;
-    obtenerElemento("confirmacion-pago").textContent = pago;
-    obtenerElemento("confirmacion-total").textContent = formatoMoneda(obtenerTotal());
+    // Validar los datos del cliente
+    if (!validarCamposPrincipales()) {
+        return false;
+    }
 
-    /* PRODUCTOS DEL PEDIDO */
+    const pago = obtenerValor("pago");
 
-    const listaProductos = obtenerElemento("confirmacion-productos");
-    listaProductos.replaceChildren();
+    // Validar transferencia si fue seleccionada
+    if (pago === "Transferencia") {
+        if (!validarTransferencia()) {
+            return false;
+        }
+    }
 
-    carrito.forEach(producto => {
-        const elemento = document.createElement("p");
-        elemento.textContent =
-            `${producto.nombre} — ${producto.cantidad} × ` +
-            `${formatoMoneda(producto.precio)} = ` +
-            `${formatoMoneda(producto.cantidad * producto.precio)}`;
+    // Validar tarjeta si fue seleccionada
+    if (pago === "Tarjeta") {
+        if (!validarTarjeta()) {
+            return false;
+        }
+    }
 
-        listaProductos.appendChild(elemento);
+    return true;
+}
+/* ==========================================
+   25. MOSTRAR LA CONFIRMACIÓN DEL PEDIDO
+========================================== */
+
+function mostrarConfirmacion(nombre, telefono, direccion, pago) {
+
+    // Mostrar los datos del cliente y el total
+    const asignaciones = [
+        ["confirmacion-nombre", nombre],
+        ["confirmacion-telefono", telefono],
+        ["confirmacion-direccion", direccion],
+        ["confirmacion-pago", pago],
+        ["confirmacion-total", formatoMoneda(obtenerTotal())]
+    ];
+
+    asignaciones.forEach(([id, valor]) => {
+        const elemento = obtenerElemento(id);
+
+        // Comprobar que el elemento exista
+        if (elemento) {
+            elemento.textContent = valor;
+        }
     });
 
-    /* INFORMACIÓN DEL PAGO */
+    /* ======================================
+       MOSTRAR LOS PRODUCTOS DEL PEDIDO
+    ====================================== */
 
-    const datosPago = obtenerElemento("confirmacion-datos-pago");
+    const listaProductos =
+        obtenerElemento("confirmacion-productos");
+
+    if (listaProductos) {
+        listaProductos.replaceChildren();
+
+        carrito.forEach(producto => {
+            const elemento = document.createElement("p");
+
+            const subtotal =
+                producto.precio * producto.cantidad;
+
+            elemento.textContent =
+                `${producto.nombre} — ${producto.cantidad} × ` +
+                `${formatoMoneda(producto.precio)} = ` +
+                `${formatoMoneda(subtotal)}`;
+
+            listaProductos.appendChild(elemento);
+        });
+    }
+
+    /* ======================================
+       MOSTRAR INFORMACIÓN DEL PAGO
+    ====================================== */
+
+    const datosPago =
+        obtenerElemento("confirmacion-datos-pago");
+
+    if (!datosPago) return;
+
     datosPago.replaceChildren();
 
     function agregarDato(texto) {
@@ -455,91 +878,203 @@ function confirmarPedido(evento) {
         datosPago.appendChild(parrafo);
     }
 
+    // Transferencia de demostración
     if (pago === "Transferencia") {
-        agregarDato("Banco: " +
-            obtenerElemento("banco-transferencia").value.trim());
+        agregarDato(
+            "Banco: " + obtenerValor("banco-transferencia")
+        );
 
-        agregarDato("Referencia: " +
-            obtenerElemento("referencia-transferencia").value.trim());
+        agregarDato(
+            "Referencia: " + obtenerValor("referencia-transferencia")
+        );
 
-        agregarDato("Monto declarado: " +
-            formatoMoneda(Number(obtenerElemento("monto-transferencia").value)));
+        agregarDato(
+            "Monto declarado: " +
+            formatoMoneda(
+                Number(obtenerValor("monto-transferencia"))
+            )
+        );
 
-        agregarDato("Simulación educativa. Transferencia no verificada.");
-    } else if (pago === "Tarjeta") {
-        const numero = obtenerElemento("numero-tarjeta").value.replace(/\D/g, "");
-
-        agregarDato("Tarjeta ficticia terminada en **** " + numero.slice(-4));
-        agregarDato("Pago de demostración. No se realizó ningún cargo.");
-    } else if (pago === "Efectivo") {
-        agregarDato("Forma de pago seleccionada: efectivo.");
-    } else if (pago === "Pago al entregar") {
-        agregarDato("Forma de pago seleccionada: pago al entregar.");
+        agregarDato(
+            "Demostración: transferencia no verificada."
+        );
     }
 
-    /* MOSTRAR CONFIRMACIÓN */
+    // Tarjeta ficticia
+    else if (pago === "Tarjeta") {
+        const numero = obtenerValor("numero-tarjeta")
+            .replace(/\D/g, "");
 
+        agregarDato(
+            "Tarjeta ficticia terminada en **** " +
+            numero.slice(-4)
+        );
+
+        agregarDato(
+            "No se realizó ningún cargo."
+        );
+    }
+
+    // Efectivo
+    else if (pago === "Efectivo") {
+        agregarDato("Forma de pago seleccionada: efectivo.");
+    }
+
+    // Pago al entregar
+    else if (pago === "Pago al entregar") {
+        agregarDato(
+            "Forma de pago seleccionada: pago al entregar."
+        );
+    }
+}
+
+/* ==========================================
+   26. CONFIRMAR EL PEDIDO
+========================================== */
+
+function confirmarPedido(evento) {
+
+    // Evitar que la página se recargue
+    if (evento) {
+        evento.preventDefault();
+    }
+
+    // Comprobar que el carrito tenga productos
+    if (carrito.length === 0) {
+        alert("🛒 Tu carrito está vacío.");
+        cerrarModal("ventana-pago");
+        return;
+    }
+
+    // Validar todos los campos y el método de pago
+    if (!validarFormularioPedido()) {
+        return;
+    }
+
+    // Obtener los datos del cliente
+    const nombre = obtenerValor("nombre");
+    const telefono = obtenerValor("telefono");
+    const direccion = obtenerValor("direccion");
+    const pago = obtenerValor("pago");
+
+    // Crear el resumen del pedido
+    mostrarConfirmacion(
+        nombre,
+        telefono,
+        direccion,
+        pago
+    );
+
+    // Cerrar formulario y mostrar confirmación
     cerrarModal("ventana-pago");
     abrirModal("ventana-confirmacion");
 
-    /* VACIAR CARRITO Y RESTABLECER FORMULARIO */
-
+    // Vaciar el carrito después de confirmar
     carrito = [];
     actualizarCarrito();
 
-    formulario.reset();
+    // Limpiar el formulario
+    const formulario =
+        obtenerElemento("formulario-pedido");
+
+    if (formulario) {
+        formulario.reset();
+    }
+
+    // Restablecer los campos de pago
     mostrarDatosPago();
 }
+/* ==========================================
+   27. REGISTRAR EVENTOS DE LOS BOTONES
+========================================== */
 
-/* EVENTOS */
+function iniciarEventos() {
 
-obtenerElemento("boton-comprar").addEventListener(
-    "click", realizarPedido
-);
+    // Abrir el formulario de pedido
+    agregarEvento(
+        "boton-comprar",
+        "click",
+        realizarPedido
+    );
 
-obtenerElemento("cerrar-formulario").addEventListener(
-    "click", () => cerrarModal("ventana-pago")
-);
+    // Cerrar el formulario
+    agregarEvento(
+        "cerrar-formulario",
+        "click",
+        () => cerrarModal("ventana-pago")
+    );
 
-obtenerElemento("cerrar-confirmacion").addEventListener(
-    "click", () => cerrarModal("ventana-confirmacion")
-);
+    // Cerrar la ventana de confirmación
+    agregarEvento(
+        "cerrar-confirmacion",
+        "click",
+        () => cerrarModal("ventana-confirmacion")
+    );
 
-obtenerElemento("boton-finalizar").addEventListener(
-    "click", () => cerrarModal("ventana-confirmacion")
-);
+    // Finalizar y cerrar la confirmación
+    agregarEvento(
+        "boton-finalizar",
+        "click",
+        () => cerrarModal("ventana-confirmacion")
+    );
 
-obtenerElemento("pago").addEventListener("change", mostrarDatosPago);
+    // Actualizar los campos al cambiar el método de pago
+    agregarEvento(
+        "pago",
+        "change",
+        mostrarDatosPago
+    );
 
-obtenerElemento("formulario-pedido").addEventListener(
-    "submit", confirmarPedido
-);
+    // Procesar el formulario
+    agregarEvento(
+        "formulario-pedido",
+        "submit",
+        confirmarPedido
+    );
 
-/* CERRAR AL HACER CLIC FUERA */
+    // Cerrar las ventanas al pulsar fuera de su contenido
+    configurarCierreExterior("ventana-pago");
+    configurarCierreExterior("ventana-confirmacion");
 
-["ventana-pago", "ventana-confirmacion"].forEach(id => {
-    const modal = obtenerElemento(id);
+    // Configurar el cierre con la tecla Escape
+    configurarEscape();
+}
 
-    modal.addEventListener("click", evento => {
-        if (evento.target !== modal) return;
-        cerrarModal(id);
-    });
-});
+/* ==========================================
+   28. INICIAR LA TIENDA
+========================================== */
 
-/* CERRAR CON ESCAPE */
+function iniciarPagina() {
 
-document.addEventListener("keydown", evento => {
-    if (evento.key !== "Escape") return;
+    // Mostrar los 16 productos
+    mostrarProductos();
 
-    if (obtenerElemento("ventana-confirmacion").classList.contains("visible")) {
-        cerrarModal("ventana-confirmacion");
-    } else if (obtenerElemento("ventana-pago").classList.contains("visible")) {
-        cerrarModal("ventana-pago");
-    }
-});
+    // Mostrar el estado inicial del carrito
+    actualizarCarrito();
 
-/* INICIAR PÁGINA */
+    // Configurar los campos del método de pago
+    mostrarDatosPago();
 
-mostrarProductos();
-actualizarCarrito();
-mostrarDatosPago();
+    // Activar botones y eventos
+    iniciarEventos();
+
+    console.log("🌸 El Jardín de Snoopy está listo.");
+}
+
+/* ==========================================
+   29. EJECUTAR CUANDO CARGUE EL HTML
+========================================== */
+
+if (document.readyState === "loading") {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        iniciarPagina,
+        { once: true }
+    );
+
+} else {
+
+    iniciarPagina();
+
+}
