@@ -1,588 +1,353 @@
-"use strict";
 
-// ============================================
-// EL JARDÍN DE SNOOPY
-// Carrito y pedidos de demostración
-// ============================================
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-const carrito = [];
+    <meta name="description" content="Descubre hermosos ramos de flores en El Jardín de Snoopy.">
 
-const PRECIOS_TAMANO = {
-    "Pequeño": 250,
-    "Mediano": 400,
-    "Grande": 600
-};
+    <title>El Jardín de Snoopy | Florería</title>
 
-const PRECIOS_ENVOLTURA = {
-    "Papel kraft": 0,
-    "Papel rosa": 30,
-    "Papel elegante": 50,
-    "Envoltura premium": 80
-};
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
 
-const formatoDinero = cantidad =>
-    Number(cantidad).toLocaleString("es-MX", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    });
+<body>
 
-const obtenerElemento = id => document.getElementById(id);
+    <!-- ENCABEZADO -->
+    <header>
+        <h1>🌸 El Jardín de Snoopy 🌸</h1>
+        <p>Flores que expresan lo que siente tu corazón</p>
+        <p class="frase">Un detalle especial para cada ocasión 💐</p>
+    </header>
 
-function establecerTexto(id, texto) {
-    const elemento = obtenerElemento(id);
-    if (elemento) elemento.textContent = texto;
-}
+    <!-- NAVEGACIÓN -->
+    <nav class="navegacion" aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#carrito">Mi carrito</a>
+        <a href="#contacto">Contacto</a>
+    </nav>
 
-function escaparHTML(texto) {
-    return String(texto ?? "").replace(/[&<>"']/g, caracter => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-    })[caracter]);
-}
+    <main id="inicio">
 
-function obtenerTotal() {
-    return carrito.reduce(
-        (suma, producto) => suma + producto.precio * producto.cantidad,
-        0
-    );
-}
+        <!-- PRESENTACIÓN -->
+        <section class="seccion">
+            <h2>Bienvenidos a nuestra florería 🌷</h2>
+            <p class="introduccion">
+                Encuentra el ramo perfecto para cumpleaños, aniversarios,
+                graduaciones y cualquier momento especial.
+                Elige tus flores favoritas y agrégalas al carrito.
+            </p>
+        </section>
 
-// ============================================
-// AGREGAR PRODUCTOS AL CARRITO
-// ============================================
+        <!-- CATÁLOGO -->
+        <section class="seccion" id="catalogo">
+            <h2>💐 Nuestro catálogo</h2>
 
-function agregar(nombre, precio) {
-    precio = Number(precio);
+            <p class="introduccion">
+                Descubre nuestros 16 arreglos florales.
+                Todos los precios están expresados en pesos mexicanos.
+            </p>
 
-    if (!nombre || !Number.isFinite(precio) || precio < 0) {
-        return;
-    }
+            <div
+                class="contenedor-productos"
+                id="contenedor-productos"
+                aria-live="polite"
+            >
+                <p class="cargando">Cargando catálogo...</p>
+            </div>
+        </section>
 
-    const existente = carrito.find(producto =>
-        producto.nombre === nombre &&
-        !producto.personalizado
-    );
+        <!-- CARRITO -->
+        <section class="seccion" id="carrito">
+            <h2>🛒 Mi carrito</h2>
 
-    if (existente) {
-        existente.cantidad++;
-    } else {
-        carrito.push({
-            nombre,
-            precio,
-            cantidad: 1,
-            personalizado: false
-        });
-    }
-
-    actualizarCarrito();
-    mostrarMensaje(`${nombre} se agregó al carrito.`);
-}
-
-function cambiarCantidad(indice, cambio) {
-    const producto = carrito[indice];
-    if (!producto) return;
-
-    producto.cantidad += cambio;
-
-    if (producto.cantidad <= 0) {
-        carrito.splice(indice, 1);
-    }
-
-    actualizarCarrito();
-}
-
-function eliminarProducto(indice) {
-    if (indice < 0 || indice >= carrito.length) return;
-
-    carrito.splice(indice, 1);
-    actualizarCarrito();
-}
-
-function actualizarCarrito() {
-    const lista = obtenerElemento("lista-carrito");
-    if (!lista) return;
-
-    if (carrito.length === 0) {
-        lista.innerHTML = "<p>Tu carrito está vacío.</p>";
-    } else {
-        lista.innerHTML = carrito.map((producto, indice) => `
-            <article class="producto-carrito">
-                <div class="info-producto-carrito">
-                    <h3>${escaparHTML(producto.nombre)}</h3>
-                    <p>Precio unitario: $${formatoDinero(producto.precio)}</p>
-                    <p>Subtotal: $${formatoDinero(
-                        producto.precio * producto.cantidad
-                    )}</p>
-                    ${producto.detalles ? `
-                        <p>${escaparHTML(producto.detalles)}</p>
-                    ` : ""}
+            <div class="carrito">
+                <div id="lista-carrito" aria-live="polite">
+                    <p>Tu carrito está vacío.</p>
                 </div>
 
-                <div class="controles-cantidad">
-                    <button type="button"
-                        aria-label="Disminuir cantidad de ${escaparHTML(producto.nombre)}"
-                        onclick="cambiarCantidad(${indice}, -1)">−</button>
-
-                    <span>${producto.cantidad}</span>
-
-                    <button type="button"
-                        aria-label="Aumentar cantidad de ${escaparHTML(producto.nombre)}"
-                        onclick="cambiarCantidad(${indice}, 1)">+</button>
-
-                    <button type="button"
-                        class="eliminar-producto"
-                        onclick="eliminarProducto(${indice})">
-                        Eliminar
-                    </button>
+                <div class="total">
+                    <h3>
+                        Total:
+                        <span id="total">$0.00</span>
+                    </h3>
                 </div>
-            </article>
-        `).join("");
-    }
-
-    establecerTexto("total", formatoDinero(obtenerTotal()));
-    establecerTexto("total-pago", formatoDinero(obtenerTotal()));
-    actualizarPrecioPersonalizado();
-}
-
-// ============================================
-// PERSONALIZAR UN RAMO
-// ============================================
-
-function calcularPrecioPersonalizado() {
-    const tamano = obtenerElemento("tamano-ramo")?.value || "";
-    const envoltura = obtenerElemento("envoltura-ramo")?.value || "";
-
-    if (!PRECIOS_TAMANO[tamano] && tamano !== "Pequeño") {
-        return 0;
-    }
-
-    if (!(envoltura in PRECIOS_ENVOLTURA)) {
-        return 0;
-    }
-
-    return PRECIOS_TAMANO[tamano] + PRECIOS_ENVOLTURA[envoltura];
-}
-
-function actualizarPrecioPersonalizado() {
-    establecerTexto(
-        "precio-personalizado",
-        "$" + formatoDinero(calcularPrecioPersonalizado())
-    );
-}
-
-function mostrarMensaje(mensaje) {
-    const elemento = obtenerElemento("mensaje-personalizacion");
-
-    if (elemento) {
-        elemento.textContent = mensaje;
-    }
-}
-
-function inicializarPersonalizacion() {
-    const formulario = obtenerElemento("formulario-personalizacion");
-
-    if (!formulario) return;
-
-    ["tipo-flores", "color-flores", "tamano-ramo", "envoltura-ramo"]
-        .forEach(id => {
-            obtenerElemento(id)?.addEventListener("change", () => {
-                actualizarPrecioPersonalizado();
-                mostrarMensaje("");
-            });
-        });
-
-    formulario.addEventListener("submit", evento => {
-        evento.preventDefault();
-
-        const flores = obtenerElemento("tipo-flores").value;
-        const color = obtenerElemento("color-flores").value;
-        const tamano = obtenerElemento("tamano-ramo").value;
-        const envoltura = obtenerElemento("envoltura-ramo").value;
-        const dedicatoria = obtenerElemento("mensaje-ramo").value.trim();
-
-        if (!flores || !color || !tamano || !envoltura) {
-            mostrarMensaje("Completa todas las opciones obligatorias.");
-            return;
-        }
-
-        const precio = calcularPrecioPersonalizado();
-
-        const detalles = [
-            `Flores: ${flores}`,
-            `Color: ${color}`,
-            `Tamaño: ${tamano}`,
-            `Envoltura: ${envoltura}`,
-            dedicatoria ? `Dedicatoria: ${dedicatoria}` : ""
-        ].filter(Boolean).join(" · ");
-
-        carrito.push({
-            nombre: `Ramo personalizado de ${flores}`,
-            precio,
-            cantidad: 1,
-            personalizado: true,
-            detalles
-        });
-
-        actualizarCarrito();
-        mostrarMensaje("¡Tu ramo personalizado se agregó al carrito!");
-
-        formulario.reset();
-        actualizarPrecioPersonalizado();
-    });
-
-    actualizarPrecioPersonalizado();
-}
-
-// ============================================
-// VENTANAS MODALES
-// ============================================
-
-function abrirModal(id) {
-    const modal = obtenerElemento(id);
-    if (!modal) return;
-
-    modal.classList.add("activo");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("modal-abierto");
-
-    const primerCampo = modal.querySelector(
-        "input:not([type='hidden']), select, textarea, button"
-    );
-
-    primerCampo?.focus();
-}
-
-function cerrarModal(id) {
-    const modal = obtenerElemento(id);
-    if (!modal) return;
-
-    modal.classList.remove("activo");
-    modal.setAttribute("aria-hidden", "true");
-
-    if (!document.querySelector(".modal.activo")) {
-        document.body.classList.remove("modal-abierto");
-    }
-}
-
-function realizarPedido() {
-    if (carrito.length === 0) {
-        alert("Tu carrito está vacío. Agrega al menos un producto.");
-        return;
-    }
-
-    actualizarCarrito();
-    mostrarDatosPago();
-    abrirModal("ventana-pago");
-}
-
-function cerrarFormulario() {
-    cerrarModal("ventana-pago");
-}
-
-function cerrarConfirmacion() {
-    cerrarModal("ventana-confirmacion");
-}
-
-function mostrarDatosPago() {
-    const formaPago = obtenerElemento("pago")?.value || "";
-
-    const transferencia = obtenerElemento("datos-transferencia");
-    const tarjeta = obtenerElemento("datos-tarjeta");
-
-    if (transferencia) {
-        transferencia.hidden = formaPago !== "Transferencia";
-    }
-
-    if (tarjeta) {
-        tarjeta.hidden = formaPago !== "Tarjeta";
-    }
-}
-
-// ============================================
-// CONFIRMAR PEDIDO DE DEMOSTRACIÓN
-// ============================================
-
-function inicializarPedido() {
-    const formulario = obtenerElemento("formulario-pedido");
-    if (!formulario) return;
-
-    formulario.addEventListener("submit", evento => {
-        evento.preventDefault();
-
-        if (carrito.length === 0) {
-            alert("Tu carrito está vacío.");
-            cerrarFormulario();
-            return;
-        }
-
-        const nombre = obtenerElemento("nombre").value.trim();
-        const telefono = obtenerElemento("telefono").value.trim();
-        const direccion = obtenerElemento("direccion").value.trim();
-        const pago = obtenerElemento("pago").value;
-
-        if (!nombre || !direccion || !/^\d{10}$/.test(telefono) || !pago) {
-            alert("Revisa los datos. El teléfono debe tener 10 dígitos.");
-            return;
-        }
-
-        if (pago === "Transferencia") {
-            const monto = Number(
-                obtenerElemento("monto-transferencia").value
-            );
-
-            if (!Number.isFinite(monto) || monto <= 0) {
-                alert("Ingresa un monto de prueba válido.");
-                return;
-            }
-        }
-
-        if (pago === "Tarjeta") {
-            const numero = obtenerElemento("numero-tarjeta").value.trim();
-            const titular = obtenerElemento("titular").value.trim();
-            const vencimiento = obtenerElemento("vencimiento").value.trim();
-            const cvv = obtenerElemento("cvv").value.trim();
-
-            if (!titular || !/^[0-9 ]{13,19}$/.test(numero) ||
-                !/^\d{2}\/\d{2}$/.test(vencimiento) ||
-                !/^\d{3,4}$/.test(cvv)) {
-                alert(
-                    "Completa los campos de tarjeta con datos ficticios de prueba."
-                );
-                return;
-            }
-        }
-
-        establecerTexto("confirmacion-nombre", nombre);
-        establecerTexto("confirmacion-telefono", telefono);
-        establecerTexto("confirmacion-direccion", direccion);
-        establecerTexto("confirmacion-pago", pago);
-        establecerTexto("confirmacion-total", formatoDinero(obtenerTotal()));
-
-        const listaProductos = obtenerElemento("confirmacion-productos");
-
-        if (listaProductos) {
-            listaProductos.innerHTML = `
-                <ul>
-                    ${carrito.map(producto => `
-                        <li>
-                            ${escaparHTML(producto.nombre)}
-                            × ${producto.cantidad} —
-                            $${formatoDinero(producto.precio * producto.cantidad)}
-                            ${producto.detalles ? `
-                                <p>${escaparHTML(producto.detalles)}</p>
-                            ` : ""}
-                        </li>
-                    `).join("")}
-                </ul>
-            `;
-        }
-
-        const datosPago = obtenerElemento("confirmacion-datos-pago");
-
-        if (datosPago) {
-            if (pago === "Transferencia") {
-                datosPago.textContent =
-                    "Demostración: banco " +
-                    (obtenerElemento("banco-transferencia").value.trim() ||
-                        "no especificado") +
-                    ". No se verificó ninguna transferencia.";
-            } else if (pago === "Tarjeta") {
-                datosPago.textContent =
-                    "Pago de tarjeta simulado. No se procesó ninguna transacción.";
-            } else {
-                datosPago.textContent =
-                    "Método seleccionado para esta demostración.";
-            }
-        }
-
-        cerrarFormulario();
-        abrirModal("ventana-confirmacion");
-
-        // No se envía información a ningún servidor.
-        // El carrito se vacía al terminar la demostración.
-        carrito.length = 0;
-        actualizarCarrito();
-
-        formulario.reset();
-        mostrarDatosPago();
-    });
-}
-
-// ============================================
-// INICIALIZACIÓN
-// ============================================
-
-document.addEventListener("DOMContentLoaded", () => {
-    inicializarPersonalizacion();
-    inicializarPedido();
-    mostrarDatosPago();
-    actualizarCarrito();
-
-    obtenerElemento("cerrar-formulario")?.addEventListener(
-        "click", cerrarFormulario
-    );
-
-    obtenerElemento("cerrar-confirmacion")?.addEventListener(
-        "click", cerrarConfirmacion
-    );
-
-    obtenerElemento("boton-finalizar")?.addEventListener(
-        "click", cerrarConfirmacion
-    );
-
-    document.querySelectorAll(".modal").forEach(modal => {
-        modal.addEventListener("click", evento => {
-            if (evento.target === modal) {
-                cerrarModal(modal.id);
-            }
-        });
-    });
-
-    document.addEventListener("keydown", evento => {
-        if (evento.key === "Escape") {
-            cerrarFormulario();
-            cerrarConfirmacion();
-        }
-    });
-});
-2. Añade estos estilos al final de style.css
-No necesitas reemplazar todo tu CSS. Agrega estas reglas al final del archivo para que se respeten los colores y el diseño que ya tienes, mientras se controlan las ventanas, los campos de pago y las cantidades del carrito.
-
-css
-
-/* ==========================================
-   AJUSTES FUNCIONALES
-   El Jardín de Snoopy
-========================================== */
-
-/* Imágenes del catálogo */
-.contenedor-productos .producto img {
-    display: block;
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
-
-/* Ventanas modales */
-.modal {
-    display: none;
-}
-
-.modal.activo {
-    display: flex;
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    overflow-y: auto;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.55);
-}
-
-.modal .formulario,
-.modal .confirmacion {
-    width: 100%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-sizing: border-box;
-}
-
-body.modal-abierto {
-    overflow: hidden;
-}
-
-/* Campos de pago ocultos cuando no corresponden */
-.datos-pago[hidden] {
-    display: none !important;
-}
-
-/* Los campos de pago visibles conservan el estilo existente */
-.datos-pago:not([hidden]) {
-    display: block;
-}
-
-/* Productos del carrito */
-.producto-carrito {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 0;
-    border-bottom: 1px solid #e5d5d5;
-}
-
-.info-producto-carrito {
-    min-width: 0;
-    overflow-wrap: anywhere;
-}
-
-.info-producto-carrito h3 {
-    margin-top: 0;
-}
-
-.controles-cantidad {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.controles-cantidad button {
-    cursor: pointer;
-}
-
-.controles-cantidad .eliminar-producto {
-    display: block;
-}
-
-/* Resumen y confirmación */
-.resumen,
-.total,
-.total-confirmacion {
-    margin-top: 20px;
-}
-
-.nota {
-    font-size: 0.9rem;
-}
-
-/* Accesibilidad */
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-    outline: 2px solid #b8263a;
-    outline-offset: 3px;
-}
-
-/* Adaptación para celulares */
-@media (max-width: 600px) {
-    .modal.activo {
-        padding: 10px;
-    }
-
-    .modal .formulario,
-    .modal .confirmacion {
-        max-height: 95vh;
-    }
-
-    .producto-carrito {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .controles-cantidad {
-        justify-content: flex-start;
-    }
-
-    .contenedor-productos .producto img {
-        height: 190px;
-    }
-}
+
+                <button
+                    type="button"
+                    id="boton-comprar"
+                    class="comprar"
+                    disabled
+                >
+                    Continuar con mi pedido
+                </button>
+            </div>
+        </section>
+
+        <!-- CONTACTO -->
+        <section class="seccion" id="contacto">
+            <h2>🌹 Gracias por visitarnos</h2>
+
+            <p class="introduccion">
+                En El Jardín de Snoopy creemos que cada flor cuenta una historia.
+                Gracias por permitirnos formar parte de tus momentos especiales.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- MODAL DEL PEDIDO -->
+    <div
+        class="modal"
+        id="ventana-pago"
+        aria-hidden="true"
+    >
+        <section
+            class="formulario"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-pedido"
+        >
+            <button
+                type="button"
+                class="cerrar"
+                id="cerrar-formulario"
+                aria-label="Cerrar formulario"
+            >
+                &times;
+            </button>
+
+            <h2 id="titulo-pedido">🌸 Completa tu pedido</h2>
+
+            <p class="nota">
+                Formulario de demostración. No se procesan pagos reales.
+            </p>
+
+            <form id="formulario-pedido">
+
+                <label for="nombre">Nombre completo</label>
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    autocomplete="name"
+                    maxlength="100"
+                    required
+                >
+
+                <label for="telefono">Teléfono (10 dígitos)</label>
+                <input
+                    type="tel"
+                    id="telefono"
+                    name="telefono"
+                    inputmode="numeric"
+                    autocomplete="tel"
+                    pattern="[0-9]{10}"
+                    maxlength="10"
+                    placeholder="Ej. 9851234567"
+                    required
+                >
+
+                <label for="direccion">Dirección de entrega</label>
+                <textarea
+                    id="direccion"
+                    name="direccion"
+                    autocomplete="street-address"
+                    maxlength="300"
+                    required
+                ></textarea>
+
+                <label for="pago">Método de pago</label>
+                <select id="pago" name="pago" required>
+                    <option value="">Selecciona un método</option>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Pago al entregar">Pago al entregar</option>
+                    <option value="Transferencia">Transferencia (simulada)</option>
+                    <option value="Tarjeta">Tarjeta (datos ficticios)</option>
+                </select>
+
+                <!-- DATOS DE TRANSFERENCIA -->
+                <div
+                    class="datos-pago"
+                    id="datos-transferencia"
+                    hidden
+                >
+                    <h3>Datos de transferencia</h3>
+
+                    <p class="nota">
+                        Simulación educativa. No realices transferencias reales.
+                    </p>
+
+                    <label for="banco-transferencia">Banco</label>
+                    <input
+                        type="text"
+                        id="banco-transferencia"
+                        maxlength="80"
+                    >
+
+                    <label for="referencia-transferencia">Referencia de prueba</label>
+                    <input
+                        type="text"
+                        id="referencia-transferencia"
+                        maxlength="50"
+                    >
+
+                    <label for="monto-transferencia">Monto declarado ($)</label>
+                    <input
+                        type="number"
+                        id="monto-transferencia"
+                        min="0.01"
+                        step="0.01"
+                    >
+                </div>
+
+                <!-- DATOS DE TARJETA -->
+                <div
+                    class="datos-pago"
+                    id="datos-tarjeta"
+                    hidden
+                >
+                    <h3>Tarjeta de demostración</h3>
+
+                    <p class="nota">
+                        Utiliza exclusivamente datos ficticios.
+                        No introduzcas información de una tarjeta real.
+                    </p>
+
+                    <label for="titular">Titular ficticio</label>
+                    <input
+                        type="text"
+                        id="titular"
+                        autocomplete="off"
+                        maxlength="100"
+                    >
+
+                    <label for="numero-tarjeta">Número ficticio</label>
+                    <input
+                        type="text"
+                        id="numero-tarjeta"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        maxlength="19"
+                        placeholder="1234 5678 9012 3456"
+                    >
+
+                    <div class="tarjeta-fila">
+                        <div>
+                            <label for="vencimiento">Vencimiento (MM/AA)</label>
+                            <input
+                                type="text"
+                                id="vencimiento"
+                                inputmode="numeric"
+                                autocomplete="off"
+                                maxlength="5"
+                                placeholder="MM/AA"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="cvv">CVV ficticio</label>
+                            <input
+                                type="password"
+                                id="cvv"
+                                inputmode="numeric"
+                                autocomplete="off"
+                                maxlength="4"
+                                placeholder="123"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RESUMEN -->
+                <div class="resumen">
+                    <strong>Total del pedido:</strong>
+                    <strong id="total-pago">$0.00</strong>
+                </div>
+
+                <button type="submit" class="confirmar">
+                    Confirmar pedido de demostración
+                </button>
+
+            </form>
+        </section>
+    </div>
+
+    <!-- MODAL DE CONFIRMACIÓN -->
+    <div
+        class="modal"
+        id="ventana-confirmacion"
+        aria-hidden="true"
+    >
+        <section
+            class="confirmacion"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-confirmacion"
+        >
+            <button
+                type="button"
+                class="cerrar"
+                id="cerrar-confirmacion"
+                aria-label="Cerrar confirmación"
+            >
+                &times;
+            </button>
+
+            <div class="icono-confirmacion" aria-hidden="true">
+                🌷
+            </div>
+
+            <h2 id="titulo-confirmacion">¡Pedido confirmado!</h2>
+
+            <p class="mensaje-confirmacion">
+                Tu pedido se registró únicamente en esta demostración.
+                No se envió a un servidor ni se realizó ningún cobro.
+            </p>
+
+            <div class="detalle-pedido">
+                <h3>Datos del cliente</h3>
+                <p><strong>Nombre:</strong> <span id="confirmacion-nombre"></span></p>
+                <p><strong>Teléfono:</strong> <span id="confirmacion-telefono"></span></p>
+                <p><strong>Dirección:</strong> <span id="confirmacion-direccion"></span></p>
+                <p><strong>Pago:</strong> <span id="confirmacion-pago"></span></p>
+            </div>
+
+            <div class="detalle-pedido">
+                <h3>Productos del pedido</h3>
+                <div id="confirmacion-productos"></div>
+            </div>
+
+            <div class="detalle-pedido">
+                <h3>Información del pago</h3>
+                <div id="confirmacion-datos-pago"></div>
+            </div>
+
+            <div class="total-confirmacion">
+                <span>Total:</span>
+                <strong id="confirmacion-total">$0.00</strong>
+            </div>
+
+            <button
+                type="button"
+                class="boton-finalizar"
+                id="boton-finalizar"
+            >
+                Finalizar
+            </button>
+        </section>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer>
+        <p>🌸 El Jardín de Snoopy 🌸</p>
+        <p>Flores para regalar momentos inolvidables.</p>
+        <p>&copy; 2026 El Jardín de Snoopy</p>
+    </footer>
+
+</body>
+</html>
+
